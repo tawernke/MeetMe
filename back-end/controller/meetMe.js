@@ -1,0 +1,187 @@
+const Event = require('../model/events')
+const User = require('../model/users')
+const Place = require ('../model/places')
+const Preference = require ('../model/preferences')
+const axios = require('axios')
+const fs = require('fs')
+const {yelpApiKey} = require ('./ApiKey')
+
+const MeetMeController = {
+  //Homepage controllers
+  addUser: (newUser) => {
+    const { username, name } = newUser
+    return new Promise((resolve, reject) => {
+      User
+      const newUser = new User({
+        username, name
+      })
+      newUser
+        .save()
+        .then(user => resolve(user))
+    })
+  },
+  getUsers: () => {
+    return new Promise((resolve, reject) => {
+      User
+        .fetchAll({})
+        .then(users => {
+          resolve(users.models.map(users => users.attributes))
+        })
+    })
+  },
+  //Profile Controllers
+  getUserProfile: (user) => {
+    return new Promise((resolve, reject) => {
+      new User()
+        .where('username', user.username)
+        .fetchAll({withRelated: ['places', 'preferences']})
+        .then(users => {
+          resolve(users.models.map(users => users))
+        })
+    })
+  },
+  
+  getEvents: () => {
+    return new Promise((resolve, reject) => {
+      new Event()
+        .fetchAll({withRelated: ['users']})
+        .then(events => {
+        
+          resolve(events.models.map(events => events))
+        })
+    })
+  },
+  postEvent: (newEvent) => {
+    return new Promise((resolve, reject) => {
+      const user_ids = newEvent.users
+      delete newEvent.users
+      new Event(newEvent)
+        .save()
+        .then(event => {
+          return event.users().attach(user_ids)
+        })
+        .then(()  => {
+          new Event()
+          .query(function(qb) {
+            qb.orderBy('id', 'DESC')})
+          .fetch({withRelated: ['users']})
+          .then(event => resolve(event))
+        })
+    })
+  },
+  updateEvent: (updatedEvent) => {
+    return new Promise((resolve, reject) => {
+      const user_ids = updatedEvent.users
+      delete updatedEvent.users
+      new Event({id: updatedEvent.id})
+        .save()
+        .then(event => {
+          return event.users().attach(user_ids)
+        })
+    })
+  },
+  deleteEvent: (deletedEvent) => {
+    return new Promise((resolve, reject) => {
+      Event
+        .forge({id: deletedEvent.eventId})
+        .fetch({withRelated: ['users']})
+        .then(event => {
+          event.users().detach()
+          event.destroy()
+          resolve(event)
+        })
+ 
+    })
+  },
+
+  //Discover Controllers
+  getSuggestedPlaces: (currentLocation) => {
+    return new Promise((resolve, reject) => {
+    const config = {
+      headers: {'Authorization': 'Bearer ' + yelpApiKey}
+    }
+    axios
+      .get(`http://api.yelp.com/v3/businesses/search?location=${currentLocation.streetNumber},${currentLocation.street},${currentLocation.city}`, config)
+      .then(results => resolve(results))
+    })
+  },
+  getSearchResults: (searchParams) => {
+    return new Promise((resolve, reject) => {
+      const config = {
+        headers: {
+          'Authorization': 'Bearer ' + yelpApiKey
+        }
+      }
+      axios
+        .get(`http://api.yelp.com/v3/businesses/search?term=${searchParams.keyWord}&location=${searchParams.location}`, config)
+        .then(results => resolve(results.data))
+      })
+  },
+
+  //Your Places Controllers
+  getYourPlaces: (currentUser) => {
+    return new Promise((resolve, reject) => {
+      new Place()
+        .fetchAll()
+        .then(places => {
+          resolve(places.models.map(places => places.attributes))
+        })
+    })
+  },
+
+  addNewPlace: (newPlace) => {
+    return new Promise((resolve, reject) => {
+      const user_id = newPlace.user_id
+      delete newPlace.user_id
+      new Place(newPlace)
+        .save()
+        .then(place => {
+          return place.users().attach(user_id)
+        })
+    })
+  },
+
+    addPreference:(newPreference) => {
+      return new Promise((resolve, reject) => {
+        const user_id = newPreference.id
+        delete newPreference.id
+        new Preference(newPreference)
+          .save()
+          .then(preference => {
+            return preference.users().attach(user_id)
+          })
+          .then(preferece => resolve(preferece))
+      })
+    },
+
+    uploadProfilePhoto:(file) => {
+      return new Promise((resolve, reject) => {
+          console.log(file)
+          let newPath = __dirname + '/public/images/' + file.filename
+          console.log(newPath)
+          switch(file.mimetype) {
+            case 'image/jpeg':
+            console.log('in case')
+              newPath += '.jpg'
+              console.log(newPath)
+              break
+            case 'image/png':
+              newPath += '.png'
+              break
+            default:
+          }
+
+          fs.rename(file.path, newPath, (err) => {
+            if(err) {
+              console.log(err)
+              res.send('error')
+            } else {
+              res.send('success')
+            }
+          })
+      })
+    }
+
+}
+
+module.exports = MeetMeController

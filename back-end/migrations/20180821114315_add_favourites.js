@@ -1,0 +1,52 @@
+exports.up = function (knex, Promise) {
+  return knex.schema.createTableIfNotExists('users', function (table) {
+    table.increments('id').primary()
+    table.string('username').notNullable()
+    table.string('name').notNullable()
+  }).createTableIfNotExists('events', function (table) {
+    table.increments('id').primary()
+    table.string('title').notNullable()
+    table.string('description')
+    table.string('start').notNullable()
+    table.string('end')
+    table.string('location')
+    table.boolean('allDay')
+  }).createTableIfNotExists('places', function (table) {
+    table.increments('id').primary()
+    table.string('name').notNullable()
+    table.string('address_1')
+    table.string('city')
+    table.string('state')
+    table.string('zip_code')
+    table.string('country')
+    table.string('type')
+    table.string('rating')
+    table.string('image')
+    table.string('phone')
+  }).createTableIfNotExists('preferences', function (table) {
+    table.increments('id').primary()
+    table.string('name').notNullable()
+  }).createTableIfNotExists('events_users', function (table) {
+    table.increments('id').primary()
+    table.integer('user_id').references('users.id')
+    table.integer('event_id').references('events.id')
+  }).createTableIfNotExists('places_users', function (table) {
+    table.increments('id').primary()
+    table.integer('user_id').references('users.id')
+    table.integer('place_id').references('places.id')
+  }).createTableIfNotExists('preferences_users', function (table) {
+    table.increments('id').primary()
+    table.integer('user_id').references('users.id')
+    table.integer('preference_id').references('preferences.id')
+  })
+}
+
+exports.down = function (knex, Promise) {
+  return knex.schema
+    .dropTable('events_users')
+    .dropTable('places_users')
+    .dropTable('preferences_users')
+    .dropTable('places')
+    .dropTable('users')
+    .dropTable('events')
+}
