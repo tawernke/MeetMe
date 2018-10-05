@@ -85,6 +85,9 @@ class Discover extends Component {
       const isToDoSaved = this.state.savedPlaces.filter(savedPlace => {
         return placeSuggestion.name === savedPlace.name && savedPlace.type === "todo"
       })
+      const isFavouriteSaved = this.state.savedPlaces.filter(savedPlace => {
+        return placeSuggestion.name === savedPlace.name && savedPlace.type === "favourite"
+      })
       return <Place
         name = {placeSuggestion.name}
         address1 = {placeSuggestion.location.address1}
@@ -98,8 +101,8 @@ class Discover extends Component {
         key = {i}
         price={placeSuggestion.price}
         addPlace={this.props.addPlace}
-        savedPlaces={this.state.savedPlaces}
         isToDoSaved={isToDoSaved}
+        isFavouriteSaved={isFavouriteSaved}
         />
     })
     const {streetNumber, street, city, showingSearchResults} = this.state
