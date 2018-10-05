@@ -83,6 +83,12 @@ body {
   padding-top: 15px;
 }
 
+.preferences-close {
+  height: 9px;
+  width: auto;
+  float: right;
+}
+
 .profile-picture {
   width: 80%;
 }

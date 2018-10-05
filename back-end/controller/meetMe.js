@@ -118,6 +118,17 @@ const MeetMeController = {
       })
   },
 
+  getSavedPlaces: (user) => {
+    return new Promise((resolve, reject) => {
+      new User()
+        .where('username', user.username)
+        .fetchAll({withRelated: ['places']})
+        .then(users => {
+          resolve(users.models.map(users => users.relations))
+        })
+    })
+  },
+
   //Your Places Controllers
   getYourPlaces: (currentUser) => {
     return new Promise((resolve, reject) => {
@@ -148,9 +159,23 @@ const MeetMeController = {
         new Preference(newPreference)
           .save()
           .then(preference => {
-            return preference.users().attach(user_id)
+            preference.users().attach(user_id)
+            resolve(preference)
           })
-          .then(preferece => resolve(preferece))
+          // .then(preference => resolve(preference))
+      })
+    },
+
+    deletePreference:(newPreference) => {
+      return new Promise((resolve, reject) => {
+        Preference
+        .forge({id: newPreference.id})
+        .fetch({withRelated: ['users']})
+        .then(preference => {
+          preference.users().detach()
+          preference.destroy()
+          resolve(preference)
+        })
       })
     },
 

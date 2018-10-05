@@ -5,10 +5,13 @@ import Place from './Place'
 import {Spin} from 'antd'
 import {googleMapsApiKey} from '../ApiKey'
 
+const usernameStorageKey = 'USERNAME'
+
 class Discover extends Component {
   
   state = {
     placeSuggestions: [],
+    savedPlaces: [],
     redirect: false,
     city: '',
     street: '',
@@ -23,6 +26,14 @@ class Discover extends Component {
         redirect: true,
       })
     } else {
+      const loggedInUser = JSON.parse(localStorage.getItem(usernameStorageKey))
+      axios
+        .get(`http://localhost:8080/discoverSavedPlaces/${loggedInUser.username}`)
+        .then(response => {
+          this.setState({
+            savedPlaces: response.data[0].places,
+          })
+        })
       let city = ''
       let street = ''
       let streetNumber = ''
@@ -37,13 +48,12 @@ class Discover extends Component {
             axios
               .get(`http://localhost:8080/discover/${city}/${street}/${streetNumber}`)
               .then(response => {
-                console.log(response.data)
                 this.setState({
                   placeSuggestions: response.data.businesses,
-                  isLoading: false,
                   streetNumber,
                   street,
-                  city
+                  city,
+                  isLoading: false,
                 })
               })
           })
@@ -61,7 +71,6 @@ class Discover extends Component {
     axios
       .get(`http://localhost:8080/discoverSearch/${searchTerms.location}/${searchTerms.keyWord}`)
       .then(response => {
-        console.log(response.data)
         this.setState({
           placeSuggestions: response.data.businesses,
           showingSearchResults: true
@@ -71,20 +80,26 @@ class Discover extends Component {
   
   render() {
     if(this.state.redirect) return <Redirect to='/'/>
-    const placeJSX = this.state.placeSuggestions.map((place, i) => {
+
+    const placeJSX = this.state.placeSuggestions.map((placeSuggestion, i) => {
+      const isToDoSaved = this.state.savedPlaces.filter(savedPlace => {
+        return placeSuggestion.name === savedPlace.name && savedPlace.type === "todo"
+      })
       return <Place
-        name = {place.name}
-        address1 = {place.location.address1}
-        city = {place.location.city}
-        state = {place.location.state}
-        zip = {place.location.zip_code}
-        country = {place.location.country}
-        image = {place.image_url}
-        rating = {place.rating}
-        phoneNumber = {place.phone}
+        name = {placeSuggestion.name}
+        address1 = {placeSuggestion.location.address1}
+        city = {placeSuggestion.location.city}
+        state = {placeSuggestion.location.state}
+        zip = {placeSuggestion.location.zip_code}
+        country = {placeSuggestion.location.country}
+        image = {placeSuggestion.image_url}
+        rating = {placeSuggestion.rating}
+        phoneNumber = {placeSuggestion.phone}
         key = {i}
-        price={place.price}
+        price={placeSuggestion.price}
         addPlace={this.props.addPlace}
+        savedPlaces={this.state.savedPlaces}
+        isToDoSaved={isToDoSaved}
         />
     })
     const {streetNumber, street, city, showingSearchResults} = this.state

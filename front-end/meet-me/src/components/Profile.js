@@ -25,7 +25,6 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    console.log('here')
     if (localStorage.getItem('USERNAME') === null) {
       this.props.history.push('/')
     }
@@ -185,7 +184,7 @@ class Profile extends Component {
                     center: 'title',
                     right: 'month,basicWeek,basicDay'
                   }}
-                  defaultDate={'2018-08-24'}
+                  defaultDate={'2018-09-24'}
                   navLinks= {true} // can click day/week names to navigate views
                   editable= {true}
                   eventLimit= {true} // allow "more" link when too many events

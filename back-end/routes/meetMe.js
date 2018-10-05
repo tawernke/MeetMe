@@ -61,6 +61,11 @@ router.get('/discoverSearch/:location/:keyWord', (req, res) => {
     .getSearchResults(req.params)
     .then(results => res.json(results))
 })
+router.get('/discoverSavedPlaces/:username', (req, res) => {
+  MeetMeController
+    .getSavedPlaces(req.params)
+    .then(results => res.json(results))
+})
 
 //Your Places Routes
 router.get('/places', (req, res) => {
@@ -82,7 +87,17 @@ router.post('/newPlace', (req, res) => {
 router.post('/preference', (req, res) => {
   MeetMeController
     .addPreference(req.body)
-    .then(res.json('success'))
+    .then(results => {
+      res.json(results)
+    })
+})
+
+router.delete('/preference', (req, res) => {
+  MeetMeController
+    .deletePreference(req.body)
+    .then(results => {
+      res.json(results)
+    })
 })
 
 router.post('/profilePicture', upload.single('profile'), (req, res) => {
