@@ -29,12 +29,6 @@ class Place extends Component {
       phone: phoneNumber,
       type: placeType
     }
-    console.log(newToDo)
-    // const addedState = {
-    //   name: name,
-    //   type: placeType,
-    // }
-    // addPlaceToState(newToDo)
     addPlace(newToDo)
   }
 

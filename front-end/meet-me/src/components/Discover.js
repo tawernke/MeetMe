@@ -61,34 +61,12 @@ class Discover extends Component {
     }
   }
 
-  // addPlaceToState = (newPlace) => {
-  //   const newState = this.state.placeSuggestions.concat(newPlace)
-  //   this.setState({
-  //     placeSuggestions: newState
-  //   })
-  // }
-
   addPlace = (newPlace) => {
     const loggedInUserId = JSON.parse(localStorage.getItem(usernameStorageKey)).id
     newPlace.user_id = [loggedInUserId]
-    console.log(newPlace)
     axios
       .post('http://localhost:8080/newPlace', newPlace)
       .then(response => {
-        // const newPlaceResponse = {
-        //   name: response.data.name,
-        //   location: {
-        //     address1: response.data. address_1,
-        //     city: response.data.city,
-        //     state: response.data.state,
-        //     zip: response.data.zip_code,
-        //     country: response.data.country,
-        //   },
-        //   image: response.data.image,
-        //   rating: response.data.rating,
-        //   phoneNumber: response.data.phone
-        // }
-        console.log(response.data)
         const newPlacesState = this.state.savedPlaces.concat(response.data)
         this.setState({
           savedPlaces: newPlacesState

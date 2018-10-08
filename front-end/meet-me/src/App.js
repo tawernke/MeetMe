@@ -100,7 +100,6 @@ class App extends Component {
           <Route
             path='/discover'
             render={() => <Discover
-              // addPlace={this.addPlace}
             />}
           />
           <Route
