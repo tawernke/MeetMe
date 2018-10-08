@@ -147,7 +147,8 @@ const MeetMeController = {
       new Place(newPlace)
         .save()
         .then(place => {
-          return place.users().attach(user_id)
+          place.users().attach(user_id)
+          resolve(place)
         })
     })
   },

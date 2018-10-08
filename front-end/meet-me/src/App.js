@@ -41,14 +41,6 @@ class App extends Component {
         })
       })
   }
-
-  addPlace = (newPlace) => {
-    const loggedInUserId = JSON.parse(localStorage.getItem(usernameStorageKey)).id
-    newPlace.user_id = [loggedInUserId]
-    console.log(newPlace)
-    axios
-      .post('http://localhost:8080/newPlace', newPlace)
-  }
   
   addUser = (e) => {
     e.preventDefault()
@@ -108,7 +100,7 @@ class App extends Component {
           <Route
             path='/discover'
             render={() => <Discover
-              addPlace={this.addPlace}
+              // addPlace={this.addPlace}
             />}
           />
           <Route

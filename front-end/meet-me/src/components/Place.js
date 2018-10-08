@@ -4,8 +4,19 @@ import { Icon} from 'antd'
 class Place extends Component {
   
   addPlaceType = (placeType, id) => {
-    console.log(placeType)
-    const {name, address1, city, state, country, zip, image, rating, phoneNumber} = this.props
+    const {
+      name,
+      address1,
+      city,
+      state,
+      country,
+      zip,
+      image,
+      rating,
+      phoneNumber,
+      addPlace,
+      addPlaceToState
+    } = this.props
     const newToDo = {
       name: name,
       address_1: address1,
@@ -18,7 +29,13 @@ class Place extends Component {
       phone: phoneNumber,
       type: placeType
     }
-    this.props.addPlace(newToDo)
+    console.log(newToDo)
+    // const addedState = {
+    //   name: name,
+    //   type: placeType,
+    // }
+    // addPlaceToState(newToDo)
+    addPlace(newToDo)
   }
 
   render() {

@@ -6,3 +6,5 @@
 /back-end/knexfile.js
 /back-end/controller/ApiKey.js
 /front-end/meet-me/src/ApiKey.js
+
+.DS_Store
