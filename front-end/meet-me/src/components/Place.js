@@ -15,7 +15,6 @@ class Place extends Component {
       rating,
       phoneNumber,
       addPlace,
-      addPlaceToState
     } = this.props
     const newToDo = {
       name: name,
@@ -45,12 +44,12 @@ class Place extends Component {
                 <p className="card-text">Rating: {rating} </p>
                 <p className="card-text">Price: {price} </p>
                 {
-                  isToDoSaved.length > 0 ? <Icon type="star" theme="filled" style={{ fontSize: 25, color: '#FDBE34' }}onClick={() => this.addPlaceType('todo')}/> :
+                  isToDoSaved.length > 0 ? <Icon type="star" theme="filled" style={{ fontSize: 25, color: '#FDBE34' }}onClick={() => this.props.deletePlace(this.props.isToDoSaved[0].id)}/> :
                 <Icon type="star" theme="outlined" style={{ fontSize: 25, color: '#FDBE34' }}onClick={() => this.addPlaceType('todo')}/>
                 }
                 {
-                  isFavouriteSaved.length > 0 ? <Icon type="heart" theme="filled" style={{ fontSize: 25, color: '#FDBE34' }}onClick={() => this.addPlaceType('todo')}/> :
-                  <Icon type="heart" theme="outlined" style={{ fontSize: 25, color: '#FDBE34' }}onClick={() => this.addPlaceType('favourite')}/>
+                  isFavouriteSaved.length > 0 ? <Icon type="heart" theme="filled" style={{ fontSize: 25, color: '##ff0000' }}onClick={() => this.props.deletePlace(this.props.isFavouriteSaved[0].id)}/> :
+                  <Icon type="heart" theme="outlined" style={{ fontSize: 25, color: '#ff0000' }}onClick={() => this.addPlaceType('favourite')}/>
                 }
             </div>
         </div>

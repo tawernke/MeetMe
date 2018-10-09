@@ -19,6 +19,12 @@ router.get('/getUsers', (req, res) => {
     .then(users => res.json(users))
 })
 
+router.delete('/place', (req, res) => {
+  MeetMeController
+    .deletePlace(req.body)
+    .then(res.json("Success"))
+})
+
 //Profile Routes
 router.get('/userProfile/:username', (req, res) => {
   MeetMeController
@@ -98,11 +104,6 @@ router.delete('/preference', (req, res) => {
     .then(results => {
       res.json(results)
     })
-})
-
-router.post('/profilePicture', upload.single('profile'), (req, res) => {
-  MeetMeController
-    .uploadProfilePhoto(req.file)
 })
 
 module.exports = router

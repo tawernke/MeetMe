@@ -29,6 +29,18 @@ const MeetMeController = {
         })
     })
   },
+  deletePlace: (deletedPlaceId) => {
+    return new Promise((resolve, reject) => {
+      Place
+      .forge({id: deletedPlaceId.placeId})
+      .fetch({withRelated: ['users']})
+      .then(place => {
+        place.users().detach()
+        place.destroy()
+        resolve(place)
+      })
+    })
+  },
   //Profile Controllers
   getUserProfile: (user) => {
     return new Promise((resolve, reject) => {
@@ -90,7 +102,6 @@ const MeetMeController = {
           event.destroy()
           resolve(event)
         })
- 
     })
   },
 
@@ -179,35 +190,6 @@ const MeetMeController = {
         })
       })
     },
-
-    uploadProfilePhoto:(file) => {
-      return new Promise((resolve, reject) => {
-          console.log(file)
-          let newPath = __dirname + '/public/images/' + file.filename
-          console.log(newPath)
-          switch(file.mimetype) {
-            case 'image/jpeg':
-            console.log('in case')
-              newPath += '.jpg'
-              console.log(newPath)
-              break
-            case 'image/png':
-              newPath += '.png'
-              break
-            default:
-          }
-
-          fs.rename(file.path, newPath, (err) => {
-            if(err) {
-              console.log(err)
-              res.send('error')
-            } else {
-              res.send('success')
-            }
-          })
-      })
-    }
-
 }
 
 module.exports = MeetMeController

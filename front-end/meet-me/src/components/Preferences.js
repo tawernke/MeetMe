@@ -48,7 +48,7 @@ class Preferences extends Component {
     })
     axios
       .delete('http://localhost:8080/preference', {data: preferenceToDelete[0]})
-  }  
+  }
   
   render() {
     const preferencesJSX = this.state.preferences.map((preference, i) => {

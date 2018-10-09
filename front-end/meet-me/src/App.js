@@ -16,6 +16,7 @@ class App extends Component {
     users: [],
     loggedInUser: {},
     imageChange: false,
+    savedPlaces: [],
   }
 
   styleBefore={
@@ -40,7 +41,38 @@ class App extends Component {
           loggedInUser
         })
       })
+      axios
+        .get(`http://localhost:8080/discoverSavedPlaces/${loggedInUser.username}`)
+        .then(response => {
+          this.setState({
+            savedPlaces: response.data[0].places,
+          })
+        })
   }
+
+  addPlace = (newPlace) => {
+    const loggedInUserId = JSON.parse(localStorage.getItem(usernameStorageKey)).id
+    newPlace.user_id = [loggedInUserId]
+    axios
+      .post('http://localhost:8080/newPlace', newPlace)
+      .then(response => {
+        const newPlacesState = this.state.savedPlaces.concat(response.data)
+        this.setState({
+          savedPlaces: newPlacesState
+        })
+      })
+  }
+
+  deletePlace = (placeIdToDelete) => {
+    const remainingPlaces = this.state.savedPlaces.filter(place => {
+      return place.id !== placeIdToDelete
+    })
+    this.setState({
+      savedPlaces: remainingPlaces
+    })
+    axios
+      .delete('http://localhost:8080/place', {data: {placeId: placeIdToDelete}})
+    }
   
   addUser = (e) => {
     e.preventDefault()
@@ -100,6 +132,9 @@ class App extends Component {
           <Route
             path='/discover'
             render={() => <Discover
+              addPlace={this.addPlace}
+              savedPlaces={this.state.savedPlaces}
+              deletePlace={this.deletePlace}
             />}
           />
           <Route

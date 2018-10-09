@@ -26,14 +26,6 @@ class Discover extends Component {
         redirect: true,
       })
     } else {
-      const loggedInUser = JSON.parse(localStorage.getItem(usernameStorageKey))
-      axios
-        .get(`http://localhost:8080/discoverSavedPlaces/${loggedInUser.username}`)
-        .then(response => {
-          this.setState({
-            savedPlaces: response.data[0].places,
-          })
-        })
       let city = ''
       let street = ''
       let streetNumber = ''
@@ -61,19 +53,6 @@ class Discover extends Component {
     }
   }
 
-  addPlace = (newPlace) => {
-    const loggedInUserId = JSON.parse(localStorage.getItem(usernameStorageKey)).id
-    newPlace.user_id = [loggedInUserId]
-    axios
-      .post('http://localhost:8080/newPlace', newPlace)
-      .then(response => {
-        const newPlacesState = this.state.savedPlaces.concat(response.data)
-        this.setState({
-          savedPlaces: newPlacesState
-        })
-      })
-  }
-
   searchPlaces = (e) => {
     e.preventDefault()
     const form = e.target
@@ -95,10 +74,10 @@ class Discover extends Component {
     if(this.state.redirect) return <Redirect to='/'/>
 
     const placeJSX = this.state.placeSuggestions.map((placeSuggestion, i) => {
-      const isToDoSaved = this.state.savedPlaces.filter(savedPlace => {
+      const isToDoSaved = this.props.savedPlaces.filter(savedPlace => {
         return placeSuggestion.name === savedPlace.name && savedPlace.type === "todo"
       })
-      const isFavouriteSaved = this.state.savedPlaces.filter(savedPlace => {
+      const isFavouriteSaved = this.props.savedPlaces.filter(savedPlace => {
         return placeSuggestion.name === savedPlace.name && savedPlace.type === "favourite"
       })
       return <Place
@@ -113,7 +92,8 @@ class Discover extends Component {
         phoneNumber = {placeSuggestion.phone}
         key = {i}
         price={placeSuggestion.price}
-        addPlace={this.addPlace}
+        addPlace={this.props.addPlace}
+        deletePlace={this.props.deletePlace}
         isToDoSaved={isToDoSaved}
         isFavouriteSaved={isFavouriteSaved}
         addPlaceToState={this.addPlaceToState}
