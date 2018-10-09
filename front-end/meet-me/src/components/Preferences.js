@@ -35,24 +35,21 @@ class Preferences extends Component {
     }
   }
 
-  deletePreference = (e, name) => {
+  deletePreference = (e, id) => {
     e.preventDefault()
-    const preferenceToDelete = this.state.preferences.filter(preference => {
-      return preference.name === name
-    })
     const remainingPreferences = this.state.preferences.filter(preference => {
-      return preference.name !==name
+      return preference.id !== id
     })
     this.setState({
       preferences: remainingPreferences
     })
     axios
-      .delete('http://localhost:8080/preference', {data: preferenceToDelete[0]})
+      .delete('http://localhost:8080/preference', {data: {preferenceId: id}})
   }
   
   render() {
     const preferencesJSX = this.state.preferences.map((preference, i) => {
-      return <li key={i}>{preference.name}<img onClick={(e) => this.deletePreference(e, preference.name)} className="preferences-close" src="close-512.png" alt="" /></li>
+      return <li key={i}>{preference.name}<img onClick={(e) => this.deletePreference(e, preference.id)} className="preferences-close" src="close-512.png" alt="" /></li>
     })
     let formOrNothing = ''
     if(this.state.loggedInUserName === this.props.currentUser[0].username) {

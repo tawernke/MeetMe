@@ -159,6 +159,10 @@ body {
 
 /* Discover page */
 
+.saveIcon {
+  cursor: pointer;
+}
+
 .discover-placeIcon {
   padding-right: 10px;
 }

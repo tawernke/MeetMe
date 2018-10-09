@@ -18,35 +18,6 @@ class YourPlaces extends Component {
     username: 'username'  
   }
 
-getBase64 = (img, callback) => {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
-
-  beforeUpload = (file) => {
-  const isJPG = file.type === 'image/jpeg';
-  if (!isJPG) {
-    message.error('You can only upload JPG file!');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
-  }
-  return isJPG && isLt2M;
-}
-
-  uploadProfile = (e) => {
-    e.preventDefault()
-    let data = new FormData()
-    data.append('profile', e.target.profile.files[0])
-    data.append('username', this.state.username)
-    axios.post('http://localhost:8080/profilePicture', data)
-      .then(response => {
-        console.log(response.data)
-      })
-  }
-
   showModal = (placeId) => {
     const clickedPlace = this.props.currentUser[0].places.filter(place => {
         return place.id === placeId

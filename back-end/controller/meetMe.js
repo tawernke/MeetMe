@@ -179,15 +179,16 @@ const MeetMeController = {
     },
 
     deletePreference:(newPreference) => {
+      console.log(newPreference)
       return new Promise((resolve, reject) => {
         Preference
-        .forge({id: newPreference.id})
-        .fetch({withRelated: ['users']})
-        .then(preference => {
-          preference.users().detach()
-          preference.destroy()
-          resolve(preference)
-        })
+          .forge({id: newPreference.preferenceId})
+          .fetch({withRelated: ['users']})
+          .then(preference => {
+            preference.users().detach()
+            preference.destroy()
+            resolve(preference)
+          })
       })
     },
 }
