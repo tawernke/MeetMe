@@ -130,6 +130,7 @@ const MeetMeController = {
   },
 
   getSavedPlaces: (user) => {
+    console.log(user)
     return new Promise((resolve, reject) => {
       new User()
         .where('username', user.username)

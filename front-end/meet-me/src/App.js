@@ -41,13 +41,18 @@ class App extends Component {
           loggedInUser
         })
       })
+
+    if (localStorage.getItem('USERNAME') !== null) {
       axios
         .get(`http://localhost:8080/discoverSavedPlaces/${loggedInUser.username}`)
         .then(response => {
-          this.setState({
-            savedPlaces: response.data[0].places,
-          })
+          if(response.data.length > 0) {
+            this.setState({
+              savedPlaces: response.data[0].places,
+            })
+          }
         })
+    }
   }
 
   addPlace = (newPlace) => {
