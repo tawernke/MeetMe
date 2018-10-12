@@ -58,7 +58,6 @@ const MeetMeController = {
       new Event()
         .fetchAll({withRelated: ['users']})
         .then(events => {
-        
           resolve(events.models.map(events => events))
         })
     })
@@ -85,10 +84,18 @@ const MeetMeController = {
     return new Promise((resolve, reject) => {
       const user_ids = updatedEvent.users
       delete updatedEvent.users
-      new Event({id: updatedEvent.id})
-        .save()
+      Event
+        .forge({id: updatedEvent.id})
+        .save(updatedEvent)
         .then(event => {
           return event.users().attach(user_ids)
+        })
+        .then(()  => {
+          new Event()
+          .query(function(qb) {
+            qb.orderBy('id', 'DESC')})
+          .fetch({withRelated: ['users']})
+          .then(event => resolve(event))
         })
     })
   },
