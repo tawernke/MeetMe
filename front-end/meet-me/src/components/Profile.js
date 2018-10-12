@@ -89,7 +89,6 @@ class Profile extends Component {
       users: eventUserIds,
       allDay: false
     }
-    console.log(newEvent)
     if(!this.state.currentEvent.id) {
       axios
         .post('http://localhost:8080/addEvent', newEvent)
@@ -108,14 +107,16 @@ class Profile extends Component {
       })
       newState[pos] = newEvent
       newState[pos].id = this.state.currentEvent.id
-      console.log(newState[pos])
       axios
         .post('http://localhost:8080/updateEvent', newState[pos])
-        .then(console.log('success'))
-      this.setState({
-        toEventDetails: false,
-        events: newState
-      })
+        // .then(response => {
+        //   console.log(response)
+        //   this.setState({
+        //     toEventDetails: false,
+        //     events: newState
+        //   })
+        // })
+        .then(this.props.history.push(this.props.match.url))
     }
   }
 
@@ -137,6 +138,10 @@ class Profile extends Component {
       .then(response => {
         console.log(response)
       })
+  }
+
+  eventDrop = (event, delta, revertFunc) => {
+    console.log(event.title + " was dropped on " + event.start.format())
   }
 
   dayClick = (date) => {
@@ -184,9 +189,11 @@ class Profile extends Component {
                     center: 'title',
                     right: 'month,basicWeek,basicDay'
                   }}
+                  selectable= {true}
                   defaultDate={'2018-09-24'}
                   navLinks= {true} // can click day/week names to navigate views
                   editable= {true}
+                  eventDrop={this.eventDrop}
                   eventLimit= {true} // allow "more" link when too many events
                   events = {this.state.events}// events filtered by the current logged on user go here!!!!!!!
                   eventClick = {this.eventClick}
