@@ -4,6 +4,8 @@ import 'antd/dist/antd.css'
 
 const Option = Select.Option;
 
+const testUsers = ["tim", "elsie", 'another one']
+
 class MultiSelect extends Component {
 
   state = {
@@ -19,7 +21,7 @@ class MultiSelect extends Component {
         <Select
           mode="multiple"
           // notFoundContent='Has not loaded'
-          // defaultValue={['Tim', 'Von']}
+          defaultValue={testUsers}
           // style={{ width: '100%' }}
           style={{ width: '100%', height: '50px' }}
           placeholder="Please select"

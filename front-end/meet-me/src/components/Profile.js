@@ -55,12 +55,11 @@ class Profile extends Component {
   }
 
   eventClick = (calEvent) => {
-    this.props.history.push(`${this.props.match.url}/event/${calEvent.id}`)
-    this.state.events.forEach(event => {
+    this.state.events.some(event => {
       if(event.id === calEvent.id) {
         this.setState({
           currentEvent: event,
-        })
+        }, () => this.props.history.push(`${this.props.match.url}/event/${calEvent.id}`))
       }
     })
 
@@ -107,16 +106,15 @@ class Profile extends Component {
       })
       newState[pos] = newEvent
       newState[pos].id = this.state.currentEvent.id
+      console.log(newState[pos])
       axios
         .post('http://localhost:8080/updateEvent', newState[pos])
-        // .then(response => {
-        //   console.log(response)
-        //   this.setState({
-        //     toEventDetails: false,
-        //     events: newState
-        //   })
-        // })
-        .then(this.props.history.push(this.props.match.url))
+        .then(response => {
+          console.log(response)
+          this.setState({
+            events: newState
+          }, () => this.props.history.push(this.props.match.url))
+        })
     }
   }
 
@@ -141,7 +139,12 @@ class Profile extends Component {
   }
 
   eventDrop = (event, delta, revertFunc) => {
-    console.log(event.title + " was dropped on " + event.start.format())
+    const shiftedEvent = {
+      id: event.id,
+      start: event.start.format(),
+    }
+    axios
+      .post('http://localhost:8080/updateEvent', shiftedEvent)
   }
 
   dayClick = (date) => {

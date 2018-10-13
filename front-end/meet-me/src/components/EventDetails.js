@@ -4,8 +4,18 @@ import MultiSelect from './MultiSelect'
 
 class EventDetails extends Component {
 
+  state = {
+    currentEventUsers: []
+  }
+
   componentDidMount() {
     let startDate = this.props.state.currentEvent.start
+    const currentEventUsers = this.props.state.currentEvent.users.map(user => {
+      return user.name
+    })
+    this.setState({
+      currentEventUsers: currentEventUsers
+    })
     if (!startDate) {
       startDate = moment(this.props.state.selectedDate).format()
       console.log(moment(startDate).format('YYYY-MM-DD'))
@@ -70,6 +80,7 @@ class EventDetails extends Component {
                 users={this.props.users}
                 currentUser={this.props.state.currentUser}
                 handleChange={this.props.handleChange}
+                currentEventUserNames={this.state.currentEventUsers}
                 />
             </div>
             <div className="col">
