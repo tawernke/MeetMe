@@ -21,7 +21,9 @@ class Profile extends Component {
     isLoading: true,
     currentUser: {},
     redirect: false,
-    selectedUsers: []
+    eventUsers: [],
+    eventTime: "",
+    eventDate: "",
   }
 
   componentDidMount() {
@@ -57,31 +59,46 @@ class Profile extends Component {
   eventClick = (calEvent) => {
     this.state.events.some(event => {
       if(event.id === calEvent.id) {
+        const currentEventUsers = event.users.map(user => {
+          return user.name
+        })
         this.setState({
           currentEvent: event,
+          currentEventUsers: currentEventUsers,
+          selectedDate: calEvent.start
         }, () => this.props.history.push(`${this.props.match.url}/event/${calEvent.id}`))
       }
     })
+  }
 
-    // Event time: ${calEvent.start.format("h:mm a")}
-    }
-
-  handleChange = (value) => {
+  usersChange = (value) => {
     this.setState({
-      selectedUsers: value
-    },() => console.log(this.state.selectedUsers))
+      eventUsers: value
+    })
+  }
+
+  timeChange = (time) => {
+    this.setState({
+      eventTime: moment(time).format("HH:mm")
+    })
+  }
+
+  dateChange = (date) => {
+    this.setState({
+      eventDate: moment(date).format("YYYY-MM-DD")
+    })
   }
 
   addEvent = (e) => {
     e.preventDefault()
-    // let usersArray = [this.state.currentUser] USE THIS IF YOU WANT THE CURRENT USER BY DEFAULT
-    let eventUserIds = this.state.selectedUsers.map(userId => {
+    let eventUserIds = this.state.eventUsers.map(userId => {
       return parseInt(userId, 10)
     })
     const form = e.target
+    // this.state.selectedDate ? this.state.selectedDate : this.state.eventDate
     const newEvent = {
       title: form.title.value,
-      start: form.startDate.value + 'T' + form.startTime.value + ':00',
+      start: this.state.selectedDate ? `${this.state.selectedDate}T${this.state.eventTime}:00` : `${this.state.eventDate}T${this.state.eventTime}:00`,
       end: "",
       location: form.location.value,
       description: form.description.value,
@@ -106,7 +123,6 @@ class Profile extends Component {
       })
       newState[pos] = newEvent
       newState[pos].id = this.state.currentEvent.id
-      console.log(newState[pos])
       axios
         .post('http://localhost:8080/updateEvent', newState[pos])
         .then(response => {
@@ -148,10 +164,15 @@ class Profile extends Component {
   }
 
   dayClick = (date) => {
-    this.props.history.push(this.props.match.url + '/event/newEvent')
     this.setState ({
-      selectedDate: moment(date)
-    }, () => console.log(this.state.selectedDate))
+      selectedDate: date
+    }, () => this.props.history.push(this.props.match.url + '/event/newEvent'))
+  }
+
+  cancelEventUpdate = () => {
+    this.setState({
+      currentEvent: ""
+    })
   }
   
   render() {
@@ -179,7 +200,9 @@ class Profile extends Component {
                   currentUser={this.props.currentUser}
                   {...routeProps}
                   selectedDate={this.selectedDate}
-                  handleChange={this.handleChange}
+                  usersChange={this.usersChange}
+                  timeChange={this.timeChange}
+                  dateChange={this.dateChange}
                   
                 />}
               />

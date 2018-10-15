@@ -4,13 +4,7 @@ import 'antd/dist/antd.css'
 
 const Option = Select.Option;
 
-const testUsers = ["tim", "elsie", 'another one']
-
 class MultiSelect extends Component {
-
-  state = {
-    isLoading: true
-  }
   
   render() {
     const usersJSX = this.props.users.map(user => {
@@ -20,12 +14,11 @@ class MultiSelect extends Component {
       <div className="multi-select-div">
         <Select
           mode="multiple"
-          // notFoundContent='Has not loaded'
-          defaultValue={testUsers}
+          defaultValue={this.props.currentEventUserNames}
           // style={{ width: '100%' }}
           style={{ width: '100%', height: '50px' }}
           placeholder="Please select"
-          onChange={this.props.handleChange}
+          onChange={this.props.usersChange}
           >
           {usersJSX}
         </Select>
