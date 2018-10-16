@@ -22,8 +22,6 @@ class Profile extends Component {
     currentUser: {},
     redirect: false,
     eventUsers: [],
-    eventTime: "",
-    eventDate: "",
   }
 
   componentDidMount() {
@@ -79,13 +77,20 @@ class Profile extends Component {
 
   timeChange = (time) => {
     this.setState({
-      eventTime: moment(time).format("HH:mm")
+      selectedDate: moment(time).set({
+        HH: moment(time).format("HH"), 
+        m: moment(time).format("mm")
+      })
     })
   }
 
   dateChange = (date) => {
     this.setState({
-      eventDate: moment(date).format("YYYY-MM-DD")
+      eventDate: moment(date).set({
+        year: moment(date).format("YYYY"),
+        month: moment(date).format("MM"),
+        date: moment(date).format("DD")
+      })
     })
   }
 
@@ -95,43 +100,43 @@ class Profile extends Component {
       return parseInt(userId, 10)
     })
     const form = e.target
-    // this.state.selectedDate ? this.state.selectedDate : this.state.eventDate
     const newEvent = {
       title: form.title.value,
-      start: this.state.selectedDate ? `${this.state.selectedDate}T${this.state.eventTime}:00` : `${this.state.eventDate}T${this.state.eventTime}:00`,
+      start: moment(this.state.selectedDate).format(),
       end: "",
       location: form.location.value,
       description: form.description.value,
       users: eventUserIds,
       allDay: false
     }
-    if(!this.state.currentEvent.id) {
-      axios
-        .post('http://localhost:8080/addEvent', newEvent)
-        .then(response => {
-          let newEvents = [...this.state.events]
-          newEvents.push(response.data)
-          this.setState({
-            events: newEvents,
-            isLoading: false
-          }, () => this.props.history.push(this.props.match.url))
-        })
-    } else {
-      const newState = [...this.state.events]
-      const pos = newState.findIndex((event, i) => {
-        return event.id === this.state.currentEvent.id
-      })
-      newState[pos] = newEvent
-      newState[pos].id = this.state.currentEvent.id
-      axios
-        .post('http://localhost:8080/updateEvent', newState[pos])
-        .then(response => {
-          console.log(response)
-          this.setState({
-            events: newState
-          }, () => this.props.history.push(this.props.match.url))
-        })
-    }
+    console.log(newEvent)
+    // if(!this.state.currentEvent.id) {
+    //   axios
+    //     .post('http://localhost:8080/addEvent', newEvent)
+    //     .then(response => {
+    //       let newEvents = [...this.state.events]
+    //       newEvents.push(response.data)
+    //       this.setState({
+    //         events: newEvents,
+    //         isLoading: false
+    //       }, () => this.props.history.push(this.props.match.url))
+    //     })
+    // } else {
+    //   const newState = [...this.state.events]
+    //   const pos = newState.findIndex((event, i) => {
+    //     return event.id === this.state.currentEvent.id
+    //   })
+    //   newState[pos] = newEvent
+    //   newState[pos].id = this.state.currentEvent.id
+    //   axios
+    //     .post('http://localhost:8080/updateEvent', newState[pos])
+    //     .then(response => {
+    //       console.log(response)
+    //       this.setState({
+    //         events: newState
+    //       }, () => this.props.history.push(this.props.match.url))
+    //     })
+    // }
   }
 
   deleteEvent = () => {
@@ -164,6 +169,7 @@ class Profile extends Component {
   }
 
   dayClick = (date) => {
+    console.log(moment(date).format())
     this.setState ({
       selectedDate: date
     }, () => this.props.history.push(this.props.match.url + '/event/newEvent'))

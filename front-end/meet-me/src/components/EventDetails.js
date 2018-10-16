@@ -56,7 +56,7 @@ class EventDetails extends Component {
                 use12Hours format="h:mm a" 
                 onChange={this.props.timeChange}
                 minuteStep={30}
-                defaultValue={moment(this.props.state.selectedDate, 'HH:mm:ss')}
+                defaultValue={moment(this.props.state.selectedDate, 'HH:mm')}
                 />
             </div>
           </div>
