@@ -21,7 +21,8 @@ class Profile extends Component {
     isLoading: true,
     currentUser: {},
     redirect: false,
-    eventUsers: [],
+    eventUserIds: [],
+    currentEventUserIds: [],
   }
 
   componentDidMount() {
@@ -60,9 +61,13 @@ class Profile extends Component {
         const currentEventUsers = event.users.map(user => {
           return user.name
         })
+        const currentEventUserIds = event.users.map(user => {
+          return user.id
+        })
         this.setState({
           currentEvent: event,
           currentEventUsers: currentEventUsers,
+          currentEventUserIds: currentEventUserIds,
           selectedDate: calEvent.start
         }, () => this.props.history.push(`${this.props.match.url}/event/${calEvent.id}`))
       }
@@ -70,9 +75,19 @@ class Profile extends Component {
   }
 
   usersChange = (value) => {
-    this.setState({
-      eventUsers: value
-    })
+    console.log(value)
+    console.log(this.state.currentEvent.users.length)
+    if (value.length > this.state.currentEvent.users.length) {
+      //function works for adding additional user ids to state
+      const currentUserId = value.splice(value.length -1, 1)
+      const newValue = value.map(userFromFunc => {
+        return this.props.users.find(user => user.name == userFromFunc).id
+      })
+      newValue.push(Number(currentUserId))
+      this.setState({
+        eventUserIds: newValue
+      })
+    }
   }
 
   timeChange = (time) => {
@@ -96,9 +111,9 @@ class Profile extends Component {
 
   addEvent = (e) => {
     e.preventDefault()
-    let eventUserIds = this.state.eventUsers.map(userId => {
-      return parseInt(userId, 10)
-    })
+    // let eventUserIds = this.state.eventUsers.map(userId => {
+    //   return parseInt(userId, 10)
+    // })
     const form = e.target
     const newEvent = {
       title: form.title.value,
@@ -106,7 +121,7 @@ class Profile extends Component {
       end: "",
       location: form.location.value,
       description: form.description.value,
-      users: eventUserIds,
+      users: this.state.eventUserIds !== 0 ? this.state.eventUserIds : this.state.currentEventUserIds,
       allDay: false
     }
     console.log(newEvent)

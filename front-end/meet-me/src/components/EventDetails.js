@@ -14,6 +14,10 @@ class EventDetails extends Component {
       console.log(moment(startDate).format('YYYY-MM-DD'))
     }
   }
+
+  addUsers = () => {
+    
+  }
   
   render() {
     let {title, start, location, description} = this.props.state.currentEvent
