@@ -48,20 +48,30 @@ class EventDetails extends Component {
           </div>
           <div className="row">
             <div className="col">
-              <p>Date:</p>
+              <p>From:</p>
               <DatePicker 
                 onChange={this.props.dateChange}
                 defaultValue={moment(this.props.state.selectedDate, 'YYYY-MM-DD')}
                 />
-            </div>
-            <div className="col">
-              <p>Time:</p>
               <TimePicker 
                 use12Hours format="h:mm a" 
                 onChange={this.props.timeChange}
                 minuteStep={30}
                 defaultValue={moment(this.props.state.selectedDate, 'HH:mm')}
                 />
+            </div>
+            <div className="col">
+              <p>To:</p>
+              <DatePicker 
+                onChange={this.props.dateChange}
+                defaultValue={moment(this.props.state.selectedDateEnd, 'YYYY-MM-DD')}
+              />
+              <TimePicker 
+                use12Hours format="h:mm a" 
+                onChange={this.props.timeChange}
+                minuteStep={30}
+                defaultValue={moment(this.props.state.selectedDateEnd, 'HH:mm')}
+              />
             </div>
           </div>
           <div className="row user-select">

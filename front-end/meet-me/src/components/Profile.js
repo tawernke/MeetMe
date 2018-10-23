@@ -74,20 +74,25 @@ class Profile extends Component {
     })
   }
 
-  usersChange = (value) => {
-    console.log(value)
-    console.log(this.state.currentEvent.users.length)
-    if (value.length > this.state.currentEvent.users.length) {
-      //function works for adding additional user ids to state
-      const currentUserId = value.splice(value.length -1, 1)
-      const newValue = value.map(userFromFunc => {
+  usersChange = (selectedUsers) => {
+    // if (selectedUsers.length > this.state.currentEvent.users.length) {
+      const currentUserId = selectedUsers.splice(selectedUsers.length -1, 1)
+      const selectedUserIds = selectedUsers.map(userFromFunc => {
         return this.props.users.find(user => user.name == userFromFunc).id
       })
-      newValue.push(Number(currentUserId))
+      selectedUserIds.push(Number(currentUserId))
       this.setState({
-        eventUserIds: newValue
+        eventUserIds: selectedUserIds
       })
-    }
+    // } 
+    // else {
+      // const selectedUserIds = selectedUsers.map(selectedUser => {
+      //   return this.props.users.find(user => user.name == selectedUser).id
+      // })
+      // this.setState({
+      //   eventUserIds: selectedUserIds
+      // })
+    // }
   }
 
   timeChange = (time) => {
@@ -118,40 +123,40 @@ class Profile extends Component {
     const newEvent = {
       title: form.title.value,
       start: moment(this.state.selectedDate).format(),
-      end: "",
+      end: moment(this.state.selectedDateEnd).format(),
       location: form.location.value,
       description: form.description.value,
       users: this.state.eventUserIds !== 0 ? this.state.eventUserIds : this.state.currentEventUserIds,
       allDay: false
     }
     console.log(newEvent)
-    // if(!this.state.currentEvent.id) {
-    //   axios
-    //     .post('http://localhost:8080/addEvent', newEvent)
-    //     .then(response => {
-    //       let newEvents = [...this.state.events]
-    //       newEvents.push(response.data)
-    //       this.setState({
-    //         events: newEvents,
-    //         isLoading: false
-    //       }, () => this.props.history.push(this.props.match.url))
-    //     })
-    // } else {
-    //   const newState = [...this.state.events]
-    //   const pos = newState.findIndex((event, i) => {
-    //     return event.id === this.state.currentEvent.id
-    //   })
-    //   newState[pos] = newEvent
-    //   newState[pos].id = this.state.currentEvent.id
-    //   axios
-    //     .post('http://localhost:8080/updateEvent', newState[pos])
-    //     .then(response => {
-    //       console.log(response)
-    //       this.setState({
-    //         events: newState
-    //       }, () => this.props.history.push(this.props.match.url))
-    //     })
-    // }
+    if(!this.state.currentEvent.id) {
+      axios
+        .post('http://localhost:8080/addEvent', newEvent)
+        .then(response => {
+          let newEvents = [...this.state.events]
+          newEvents.push(response.data)
+          this.setState({
+            events: newEvents,
+            isLoading: false
+          }, () => this.props.history.push(this.props.match.url))
+        })
+    } else {
+      const newState = [...this.state.events]
+      const pos = newState.findIndex((event, i) => {
+        return event.id === this.state.currentEvent.id
+      })
+      newState[pos] = newEvent
+      newState[pos].id = this.state.currentEvent.id
+      axios
+        .post('http://localhost:8080/updateEvent', newState[pos])
+        .then(response => {
+          console.log(response)
+          this.setState({
+            events: newState
+          }, () => this.props.history.push(this.props.match.url))
+        })
+    }
   }
 
   deleteEvent = () => {
@@ -193,7 +198,14 @@ class Profile extends Component {
   cancelEventUpdate = () => {
     this.setState({
       currentEvent: ""
-    })
+    }, () => this.props.history.push(this.props.match.url))
+  }
+
+  select = (start, end) => {
+    this.setState ({
+      selectedDate: start,
+      selectedDateEnd: moment(end).subtract(1, 'minute')
+    }, () => this.props.history.push(this.props.match.url + '/event/newEvent'))
   }
   
   render() {
@@ -237,6 +249,7 @@ class Profile extends Component {
                     right: 'month,basicWeek,basicDay'
                   }}
                   selectable= {true}
+                  select={this.select}
                   defaultDate={'2018-09-24'}
                   navLinks= {true} // can click day/week names to navigate views
                   editable= {true}

@@ -48,8 +48,8 @@ class Place extends Component {
                 <Icon className="saveIcon" type="star" theme="outlined" style={{ fontSize: 25, color: '#FDBE34' }}onClick={() => this.addPlaceType('todo')}/>
                 }
                 {
-                  isFavouriteSaved.length > 0 ? <Icon className="saveIcon" type="heart" theme="filled" style={{ fontSize: 25, color: '##ff0000' }}onClick={() => this.props.deletePlace(this.props.isFavouriteSaved[0].id)}/> :
-                  <Icon className="saveIcon" type="heart" theme="outlined" style={{ fontSize: 25, color: '#ff0000' }}onClick={() => this.addPlaceType('favourite')}/>
+                  isFavouriteSaved.length > 0 ? <Icon className="saveIcon" type="heart" theme="filled" style={{ fontSize: 25, color: "red" }}onClick={() => this.props.deletePlace(this.props.isFavouriteSaved[0].id)}/> :
+                  <Icon className="saveIcon" type="heart" theme="outlined" style={{ fontSize: 25, color: 'red' }}onClick={() => this.addPlaceType('favourite')}/>
                 }
             </div>
         </div>
