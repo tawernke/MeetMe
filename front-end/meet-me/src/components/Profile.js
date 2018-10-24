@@ -68,14 +68,15 @@ class Profile extends Component {
           currentEvent: event,
           currentEventUsers: currentEventUsers,
           currentEventUserIds: currentEventUserIds,
-          selectedDate: calEvent.start
+          selectedDate: calEvent.start,
+          selectedDateEnd: calEvent.end,
         }, () => this.props.history.push(`${this.props.match.url}/event/${calEvent.id}`))
       }
     })
   }
 
   usersChange = (selectedUsers) => {
-    // if (selectedUsers.length > this.state.currentEvent.users.length) {
+    if (this.state.currentEvent.users && selectedUsers.length > this.state.currentEvent.users.length) {
       const currentUserId = selectedUsers.splice(selectedUsers.length -1, 1)
       const selectedUserIds = selectedUsers.map(userFromFunc => {
         return this.props.users.find(user => user.name == userFromFunc).id
@@ -84,15 +85,15 @@ class Profile extends Component {
       this.setState({
         eventUserIds: selectedUserIds
       })
-    // } 
-    // else {
-      // const selectedUserIds = selectedUsers.map(selectedUser => {
-      //   return this.props.users.find(user => user.name == selectedUser).id
-      // })
-      // this.setState({
-      //   eventUserIds: selectedUserIds
-      // })
-    // }
+    } 
+    else {
+      const selectedUserIds = selectedUsers.map(selectedUser => {
+        return this.props.users.find(user => user.id == selectedUser).id
+      })
+      this.setState({
+        eventUserIds: selectedUserIds
+      })
+    }
   }
 
   timeChange = (time) => {
@@ -183,13 +184,15 @@ class Profile extends Component {
     const shiftedEvent = {
       id: event.id,
       start: event.start.format(),
+      end: event.end.format(),
+      users: event.users.map(user => user.id)
     }
+    console.log(shiftedEvent)
     axios
       .post('http://localhost:8080/updateEvent', shiftedEvent)
   }
 
   dayClick = (date) => {
-    console.log(moment(date).format())
     this.setState ({
       selectedDate: date
     }, () => this.props.history.push(this.props.match.url + '/event/newEvent'))

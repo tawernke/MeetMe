@@ -45,7 +45,7 @@ class NavBarSearch extends Component {
       >
         {usersJSX}
       </Select>
-        {this.state.fireRedirect ? <Redirect to={`${this.state.redirectUrl}`}/> : console.log("Yup") }
+        {this.state.fireRedirect ? <Redirect to={`${this.state.redirectUrl}`}/> : null }
       </div>
     )
   }
