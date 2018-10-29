@@ -4,10 +4,11 @@ import ToDos from './ToDos'
 import Preferences from './Preferences'
 import MultiSelect from './MultiSelect'
 import PlacesModal from './PlacesModal'
-import { Tabs, Icon, Upload, message } from 'antd'
+import { Tabs, Icon, Upload, Checkbox } from 'antd'
 import axios from 'axios'
 
 const TabPane = Tabs.TabPane
+const CheckboxGroup = Checkbox.Group
 
 class YourPlaces extends Component {
 
@@ -57,6 +58,13 @@ class YourPlaces extends Component {
     })
     const profileFavourites = this.props.currentUser[0].places.filter(place => {
       return place.type === 'favourite'
+    })
+    const users = this.props.users.map(user => {
+       user = {
+        label:user.name,
+        value:user.id
+      }
+      return user
     })
     const uploadButton = (
       <div>
@@ -109,6 +117,10 @@ class YourPlaces extends Component {
         <MultiSelect 
           users={this.props.users}
           usersChange={this.usersChange}
+          />
+        <CheckboxGroup
+          options={users}
+          onChange={this.props.checkBoxClick}
           />
       </div>
     )

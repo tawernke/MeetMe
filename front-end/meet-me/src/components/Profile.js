@@ -23,6 +23,7 @@ class Profile extends Component {
     redirect: false,
     eventUserIds: [],
     currentEventUserIds: [],
+    additionalCallendars: []
   }
 
   componentDidMount() {
@@ -48,33 +49,59 @@ class Profile extends Component {
             })
             return foundUser !== -1
           })
+          const coloredEvents = currentUserEvents.map(event => {
+            event.color = 'blue'
+            return event
+          })
           this.setState({
-            events: currentUserEvents,
+            events: coloredEvents,
             currentUser: loggedInUser
           })
         })
       }
   }
 
-  addUsersCallendar = (value, fullOption) => {
-    const selectedUserEvents = this.state.events.filter(event => {
-      let foundUser = event.users.findIndex(user => {
-        return user.name === fullOption[0].props.children
+  // addUsersCallendar = (value, fullOption) => {
+  //   const selectedUserEvents = this.state.events.filter(event => {
+  //     let foundUser = event.users.findIndex(user => {
+  //       return user.name === fullOption[0].props.children
+  //     })
+  //     return foundUser !== -1
+  //   })
+  //   const newSelectedUserEvents = selectedUserEvents.map(event => {
+  //     event = { ...event, color: 'red' }
+  //     return event
+  //   })
+  //   this.setState({
+  //     events: this.state.events.concat(newSelectedUserEvents),
+  //     additionalCallendars: fullOption[0].props.children
+  //   })
+  // }
+
+  checkBoxClick = (value) => {
+    if(value.length !== 0) {
+      const selectedUserEvents = this.state.events.filter(event => {
+        let foundUser = event.users.findIndex(user => {
+          return user.id === value[0]
+        })
+        return foundUser !== -1
       })
-      return foundUser !== -1
-    })
-    console.log(selectedUserEvents)
-    const newSelectedUserEvents = selectedUserEvents.map(event => {
-      event.id = event.id + 1000
-      event.color = 'red'
-      return event
-    })
-    console.log(newSelectedUserEvents)
-    console.log(this.state.events)
-    // const newEvents = this.state.events.concat(selectedUserEvents)
-    // this.setState({
-    //   events: this.state.events.concat(selectedUserEvents)
-    // })
+      const newSelectedUserEvents = selectedUserEvents.map(event => {
+        event = { ...event, color: 'red' }
+        return event
+      })
+      this.setState({
+        events: this.state.events.concat(newSelectedUserEvents),
+        additionalCallendars: value
+      })
+    } else {
+      const removeUserEvents = this.state.events.filter(event => {
+        return event.color === 'blue'
+      })
+      this.setState({
+        events: removeUserEvents
+      })
+    }
   }
 
   eventClick = (calEvent) => {
@@ -246,6 +273,7 @@ class Profile extends Component {
             showModal={this.props.showModal}
             users={this.props.users}
             addUsersCallendar={this.addUsersCallendar}
+            checkBoxClick={this.checkBoxClick}
             />
         </div>
         }

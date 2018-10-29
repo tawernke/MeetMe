@@ -54,7 +54,6 @@ const MeetMeController = {
   },
   
   getEvents: (user) => {
-    console.log(user)
     return new Promise((resolve, reject) => {
       new Event()
         // .query('where', {user_id: [2]})
