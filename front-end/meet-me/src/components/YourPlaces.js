@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Favourites from './Favourites'
 import ToDos from './ToDos'
 import Preferences from './Preferences'
+import MultiSelect from './MultiSelect'
 import PlacesModal from './PlacesModal'
 import { Tabs, Icon, Upload, message } from 'antd'
 import axios from 'axios'
@@ -16,6 +17,10 @@ class YourPlaces extends Component {
     isLoading: true,
     imageUrl: '',
     username: 'username'  
+  }
+
+  usersChange = (value, fullOption) => {
+    this.props.addUsersCallendar(value, fullOption)
   }
 
   showModal = (placeId) => {
@@ -100,6 +105,10 @@ class YourPlaces extends Component {
         </Tabs>
         <Preferences
           currentUser={this.props.currentUser}
+          />
+        <MultiSelect 
+          users={this.props.users}
+          usersChange={this.usersChange}
           />
       </div>
     )

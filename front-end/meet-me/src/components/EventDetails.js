@@ -77,7 +77,6 @@ class EventDetails extends Component {
                 users={this.props.users}
                 currentUser={this.props.state.currentUser}
                 usersChange={this.props.usersChange}
-                currentEventUserNames={this.props.state.currentEventUsers}
                 />
             </div>
             <div className="col">

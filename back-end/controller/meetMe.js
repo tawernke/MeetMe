@@ -46,17 +46,22 @@ const MeetMeController = {
     return new Promise((resolve, reject) => {
       new User()
         .where('username', user.username)
-        .fetchAll({withRelated: ['places', 'preferences']})
+        .fetchAll({withRelated: ['places', 'preferences', 'events']})
         .then(users => {
           resolve(users.models.map(users => users))
         })
     })
   },
   
-  getEvents: () => {
+  getEvents: (user) => {
+    console.log(user)
     return new Promise((resolve, reject) => {
       new Event()
+        // .query('where', {user_id: [2]})
         .fetchAll({withRelated: ['users']})
+        // .then(events => {
+        //   console.log(events)
+        // })
         .then(events => {
           resolve(events.models.map(events => events))
         })

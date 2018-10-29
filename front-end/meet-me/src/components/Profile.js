@@ -39,8 +39,9 @@ class Profile extends Component {
       })
     if (localStorage.getItem('USERNAME') !== null) {
       const loggedInUser = JSON.parse(localStorage.getItem(usernameStorageKey))
-      axios.get('http://localhost:8080/calendar')
+      axios.get(`http://localhost:8080/calendar/${this.props.match.params.username}`)
         .then(response => {
+          console.log(response.data)
           const currentUserEvents = response.data.filter(event => {
             let foundUser = event.users.findIndex(user => {
               return user.username === this.props.match.params.username
@@ -53,6 +54,27 @@ class Profile extends Component {
           })
         })
       }
+  }
+
+  addUsersCallendar = (value, fullOption) => {
+    const selectedUserEvents = this.state.events.filter(event => {
+      let foundUser = event.users.findIndex(user => {
+        return user.name === fullOption[0].props.children
+      })
+      return foundUser !== -1
+    })
+    console.log(selectedUserEvents)
+    const newSelectedUserEvents = selectedUserEvents.map(event => {
+      event.id = event.id + 1000
+      event.color = 'red'
+      return event
+    })
+    console.log(newSelectedUserEvents)
+    console.log(this.state.events)
+    // const newEvents = this.state.events.concat(selectedUserEvents)
+    // this.setState({
+    //   events: this.state.events.concat(selectedUserEvents)
+    // })
   }
 
   eventClick = (calEvent) => {
@@ -75,7 +97,8 @@ class Profile extends Component {
     })
   }
 
-  usersChange = (selectedUsers) => {
+  usersChange = (selectedUsers, fullOption) => {
+    //^^^ See if second param which has id and name can be used instead of the logic below
     if (this.state.currentEvent.users && selectedUsers.length > this.state.currentEvent.users.length) {
       const currentUserId = selectedUsers.splice(selectedUsers.length -1, 1)
       const selectedUserIds = selectedUsers.map(userFromFunc => {
@@ -221,6 +244,8 @@ class Profile extends Component {
             currentUser={this.state.userDetailsAndPlaces}
             addPlace={this.addPlace}
             showModal={this.props.showModal}
+            users={this.props.users}
+            addUsersCallendar={this.addUsersCallendar}
             />
         </div>
         }

@@ -32,9 +32,9 @@ router.get('/userProfile/:username', (req, res) => {
     .then(userProfile => res.json(userProfile))
 })
 
-router.get('/calendar', (req, res) => {
+router.get('/calendar/:username', (req, res) => {
   MeetMeController
-    .getEvents()
+    .getEvents(req.params)
     .then(events => res.json(events))
 })
 
