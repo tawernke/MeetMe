@@ -3,7 +3,6 @@ const User = require('../model/users')
 const Place = require ('../model/places')
 const Preference = require ('../model/preferences')
 const axios = require('axios')
-const fs = require('fs')
 const {yelpApiKey} = require ('./ApiKey')
 
 const MeetMeController = {
@@ -45,7 +44,7 @@ const MeetMeController = {
   getUserProfile: (user) => {
     return new Promise((resolve, reject) => {
       new User()
-        .where('username', user.username)
+        .where('id', user.userId)
         .fetchAll({withRelated: ['places', 'preferences', 'events']})
         .then(users => {
           resolve(users.models.map(users => users))
@@ -55,14 +54,12 @@ const MeetMeController = {
   
   getEvents: (user) => {
     return new Promise((resolve, reject) => {
-      new Event()
-        // .query('where', {user_id: [2]})
+      Event.query(function(qb) {
+        qb.innerJoin('events_users', 'events.id', 'events_users.event_id')
+        }).where('events_users.user_id', '=', user.userId)
         .fetchAll({withRelated: ['users']})
-        // .then(events => {
-        //   console.log(events)
-        // })
         .then(events => {
-          resolve(events.models.map(events => events))
+          resolve(events)
         })
     })
   },

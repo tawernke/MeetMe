@@ -23,7 +23,7 @@ class Profile extends Component {
     redirect: false,
     eventUserIds: [],
     currentEventUserIds: [],
-    additionalCallendars: []
+    usersCalendarsShown: []
   }
 
   componentDidMount() {
@@ -42,14 +42,7 @@ class Profile extends Component {
       const loggedInUser = JSON.parse(localStorage.getItem(usernameStorageKey))
       axios.get(`http://localhost:8080/calendar/${this.props.match.params.username}`)
         .then(response => {
-          console.log(response.data)
-          const currentUserEvents = response.data.filter(event => {
-            let foundUser = event.users.findIndex(user => {
-              return user.username === this.props.match.params.username
-            })
-            return foundUser !== -1
-          })
-          const coloredEvents = currentUserEvents.map(event => {
+          const coloredEvents = response.data.map(event => {
             event.color = 'blue'
             return event
           })
@@ -62,8 +55,9 @@ class Profile extends Component {
   }
 
   // addUsersCallendar = (value, fullOption) => {
+  //   console.log(value, fullOption)
   //   const selectedUserEvents = this.state.events.filter(event => {
-  //     let foundUser = event.users.findIndex(user => {
+  //     let foundUser = event.users.filter(user => {
   //       return user.name === fullOption[0].props.children
   //     })
   //     return foundUser !== -1
@@ -74,7 +68,6 @@ class Profile extends Component {
   //   })
   //   this.setState({
   //     events: this.state.events.concat(newSelectedUserEvents),
-  //     additionalCallendars: fullOption[0].props.children
   //   })
   // }
 
@@ -306,7 +299,7 @@ class Profile extends Component {
                   }}
                   selectable= {true}
                   select={this.select}
-                  defaultDate={'2018-09-24'}
+                  defaultDate={'2018-08-24'}
                   navLinks= {true} // can click day/week names to navigate views
                   editable= {true}
                   eventDrop={this.eventDrop}

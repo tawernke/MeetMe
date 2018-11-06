@@ -26,13 +26,13 @@ router.delete('/place', (req, res) => {
 })
 
 //Profile Routes
-router.get('/userProfile/:username', (req, res) => {
+router.get('/userProfile/:userId', (req, res) => {
   MeetMeController
     .getUserProfile(req.params)
     .then(userProfile => res.json(userProfile))
 })
 
-router.get('/calendar/:username', (req, res) => {
+router.get('/calendar/:userId', (req, res) => {
   MeetMeController
     .getEvents(req.params)
     .then(events => res.json(events))

@@ -14,7 +14,8 @@ class NavBarSearch extends Component {
     fireRedirect: false
   }
   
-  onSelect = (value) => {
+  onSelect = (value, anything) => {
+    console.log(value, anything.key)
     const redirectUrl = `/${value}`
     this.props.history.push(redirectUrl)
     window.location.reload()
@@ -28,7 +29,7 @@ class NavBarSearch extends Component {
   render() {
 
     const usersJSX = this.props.users.map((user, i) => {
-      return <Option key={i} value={user.username}>{user.name}</Option>
+      return <Option key={user.id} value={user.id}>{user.name}</Option>
     })
     return(
       <div>
@@ -37,9 +38,6 @@ class NavBarSearch extends Component {
         style={{ width: 200 }}
         placeholder="Search other profiles"
         optionFilterProp="children"
-        // onChange={handleChange}
-        // onFocus={handleFocus}
-        // onBlur={handleBlur}
         onSelect={this.onSelect}
         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
       >
