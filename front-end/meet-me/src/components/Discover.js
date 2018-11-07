@@ -21,7 +21,7 @@ class Discover extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem('USERNAME') === null) {
+    if (localStorage.getItem(usernameStorageKey) === null) {
       this.setState({
         redirect: true,
       })

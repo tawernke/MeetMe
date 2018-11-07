@@ -54,22 +54,22 @@ class Profile extends Component {
       }
   }
 
-  // addUsersCallendar = (value, fullOption) => {
-  //   console.log(value, fullOption)
-  //   const selectedUserEvents = this.state.events.filter(event => {
-  //     let foundUser = event.users.filter(user => {
-  //       return user.name === fullOption[0].props.children
-  //     })
-  //     return foundUser !== -1
-  //   })
-  //   const newSelectedUserEvents = selectedUserEvents.map(event => {
-  //     event = { ...event, color: 'red' }
-  //     return event
-  //   })
-  //   this.setState({
-  //     events: this.state.events.concat(newSelectedUserEvents),
-  //   })
-  // }
+  addUsersCallendar = (value, fullOption) => {
+    console.log(value, fullOption)
+    const selectedUserEvents = this.state.events.filter(event => {
+      let foundUser = event.users.filter(user => {
+        return user.name === fullOption[0].props.children
+      })
+      return foundUser !== -1
+    })
+    const newSelectedUserEvents = selectedUserEvents.map(event => {
+      event = { ...event, color: 'red' }
+      return event
+    })
+    this.setState({
+      events: this.state.events.concat(newSelectedUserEvents),
+    })
+  }
 
   checkBoxClick = (value) => {
     if(value.length !== 0) {
@@ -98,6 +98,7 @@ class Profile extends Component {
   }
 
   eventClick = (calEvent) => {
+    console.log(calEvent)
     this.state.events.some(event => {
       if(event.id === calEvent.id) {
         const currentEventUsers = event.users.map(user => {
@@ -114,29 +115,33 @@ class Profile extends Component {
           selectedDateEnd: calEvent.end,
         }, () => this.props.history.push(`${this.props.match.url}/event/${calEvent.id}`))
       }
+      return true
     })
   }
 
-  usersChange = (selectedUsers, fullOption) => {
+  usersChange = (user, allUsers) => {
     //^^^ See if second param which has id and name can be used instead of the logic below
-    if (this.state.currentEvent.users && selectedUsers.length > this.state.currentEvent.users.length) {
-      const currentUserId = selectedUsers.splice(selectedUsers.length -1, 1)
-      const selectedUserIds = selectedUsers.map(userFromFunc => {
-        return this.props.users.find(user => user.name == userFromFunc).id
+    // console.log(fullOption)
+    // const newIds = fullOption.map(user => {
+    //   return Number(user.key)
+    // })
+    // if (this.state.currentEvent.users && selectedUsers.length > this.state.currentEvent.users.length) {
+    //   const currentUserId = selectedUsers.splice(selectedUsers.length -1, 1)
+    //   const selectedUserIds = selectedUsers.map(userFromFunc => {
+    //     return this.props.users.find(user => user.name == userFromFunc).id
+    //   })
+    //   selectedUserIds.push(Number(currentUserId))
+    //   this.setState({
+    //     eventUserIds: selectedUserIds
+    //   })
+    // } 
+    // else {
+      const selectedUserIds = allUsers.map(user => {
+        return Number(user.key)
       })
-      selectedUserIds.push(Number(currentUserId))
       this.setState({
         eventUserIds: selectedUserIds
       })
-    } 
-    else {
-      const selectedUserIds = selectedUsers.map(selectedUser => {
-        return this.props.users.find(user => user.id == selectedUser).id
-      })
-      this.setState({
-        eventUserIds: selectedUserIds
-      })
-    }
   }
 
   timeChange = (time) => {
@@ -224,13 +229,12 @@ class Profile extends Component {
   }
 
   eventDrop = (event, delta, revertFunc) => {
+    event.start = event.start
     const shiftedEvent = {
       id: event.id,
       start: event.start.format(),
       end: event.end.format(),
-      users: event.users.map(user => user.id)
     }
-    console.log(shiftedEvent)
     axios
       .post('http://localhost:8080/updateEvent', shiftedEvent)
   }
@@ -249,8 +253,8 @@ class Profile extends Component {
 
   select = (start, end) => {
     this.setState ({
-      selectedDate: start,
-      selectedDateEnd: moment(end).subtract(1, 'minute')
+      selectedDate: moment(start).set('hour', moment().get('hour')),
+      selectedDateEnd: moment(end).subtract(60, 'minute').set('hour', moment().get('hour'))
     }, () => this.props.history.push(this.props.match.url + '/event/newEvent'))
   }
   
@@ -285,6 +289,7 @@ class Profile extends Component {
                   usersChange={this.usersChange}
                   timeChange={this.timeChange}
                   dateChange={this.dateChange}
+                  currentEventUsers={this.state.currentEventUsers}
                   
                 />}
               />
@@ -299,7 +304,7 @@ class Profile extends Component {
                   }}
                   selectable= {true}
                   select={this.select}
-                  defaultDate={'2018-08-24'}
+                  defaultDate={'2018-11-24'}
                   navLinks= {true} // can click day/week names to navigate views
                   editable= {true}
                   eventDrop={this.eventDrop}

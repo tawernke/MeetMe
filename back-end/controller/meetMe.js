@@ -54,9 +54,11 @@ const MeetMeController = {
   
   getEvents: (user) => {
     return new Promise((resolve, reject) => {
-      Event.query(function(qb) {
-        qb.innerJoin('events_users', 'events.id', 'events_users.event_id')
-        }).where('events_users.user_id', '=', user.userId)
+      Event
+        .query(qb => {
+          qb.innerJoin('events_users', 'events.id', 'events_users.event_id')
+        })
+        .where('events_users.user_id', '=', user.userId)
         .fetchAll({withRelated: ['users']})
         .then(events => {
           resolve(events)
@@ -149,7 +151,7 @@ const MeetMeController = {
   },
 
   //Your Places Controllers
-  getYourPlaces: (currentUser) => {
+  getYourPlaces: () => {
     return new Promise((resolve, reject) => {
       new Place()
         .fetchAll()
@@ -182,12 +184,10 @@ const MeetMeController = {
             preference.users().attach(user_id)
             resolve(preference)
           })
-          // .then(preference => resolve(preference))
       })
     },
 
     deletePreference:(newPreference) => {
-      console.log(newPreference)
       return new Promise((resolve, reject) => {
         Preference
           .forge({id: newPreference.preferenceId})

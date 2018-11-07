@@ -5,7 +5,6 @@ import Preferences from './Preferences'
 import MultiSelect from './MultiSelect'
 import PlacesModal from './PlacesModal'
 import { Tabs, Icon, Upload, Checkbox } from 'antd'
-import axios from 'axios'
 
 const TabPane = Tabs.TabPane
 const CheckboxGroup = Checkbox.Group
@@ -28,7 +27,6 @@ class YourPlaces extends Component {
     const clickedPlace = this.props.currentUser[0].places.filter(place => {
         return place.id === placeId
       })
-    console.log(clickedPlace[0])
     this.setState({
       visible: true,
       place: clickedPlace[0],
@@ -82,7 +80,7 @@ class YourPlaces extends Component {
           place={this.state.place}
           isLoading={this.state.isLoading}
         />
-        {this.props.currentUser[0].username === 'tawernke' ? <img className="profile-picture" src="./Tim_Wernke.jpg"/> :
+        {this.props.currentUser[0].username === 'tawernke' ? <img className="profile-picture" src="./Tim_Wernke.jpg" alt=""/> :
         <Upload
         name="avatar"
         listType="picture-card"
