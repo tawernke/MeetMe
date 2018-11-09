@@ -115,33 +115,15 @@ class Profile extends Component {
           selectedDateEnd: calEvent.end,
         }, () => this.props.history.push(`${this.props.match.url}/event/${calEvent.id}`))
       }
-      return true
     })
+    // this.props.history.push(`${this.props.match.url}/event/${calEvent.id}`)
   }
 
-  usersChange = (user, allUsers) => {
-    //^^^ See if second param which has id and name can be used instead of the logic below
-    // console.log(fullOption)
-    // const newIds = fullOption.map(user => {
-    //   return Number(user.key)
-    // })
-    // if (this.state.currentEvent.users && selectedUsers.length > this.state.currentEvent.users.length) {
-    //   const currentUserId = selectedUsers.splice(selectedUsers.length -1, 1)
-    //   const selectedUserIds = selectedUsers.map(userFromFunc => {
-    //     return this.props.users.find(user => user.name == userFromFunc).id
-    //   })
-    //   selectedUserIds.push(Number(currentUserId))
-    //   this.setState({
-    //     eventUserIds: selectedUserIds
-    //   })
-    // } 
-    // else {
-      const selectedUserIds = allUsers.map(user => {
-        return Number(user.key)
-      })
-      this.setState({
-        eventUserIds: selectedUserIds
-      })
+  selectedUsers = (userIds) => {
+    console.log(userIds)
+    this.setState({
+      eventUserIds: userIds
+    })
   }
 
   timeChange = (time) => {
@@ -179,33 +161,33 @@ class Profile extends Component {
       allDay: false
     }
     console.log(newEvent)
-    if(!this.state.currentEvent.id) {
-      axios
-        .post('http://localhost:8080/addEvent', newEvent)
-        .then(response => {
-          let newEvents = [...this.state.events]
-          newEvents.push(response.data)
-          this.setState({
-            events: newEvents,
-            isLoading: false
-          }, () => this.props.history.push(this.props.match.url))
-        })
-    } else {
-      const newState = [...this.state.events]
-      const pos = newState.findIndex((event, i) => {
-        return event.id === this.state.currentEvent.id
-      })
-      newState[pos] = newEvent
-      newState[pos].id = this.state.currentEvent.id
-      axios
-        .post('http://localhost:8080/updateEvent', newState[pos])
-        .then(response => {
-          console.log(response)
-          this.setState({
-            events: newState
-          }, () => this.props.history.push(this.props.match.url))
-        })
-    }
+    // if(!this.state.currentEvent.id) {
+    //   axios
+    //     .post('http://localhost:8080/addEvent', newEvent)
+    //     .then(response => {
+    //       let newEvents = [...this.state.events]
+    //       newEvents.push(response.data)
+    //       this.setState({
+    //         events: newEvents,
+    //         isLoading: false
+    //       }, () => this.props.history.push(this.props.match.url))
+    //     })
+    // } else {
+    //   const newState = [...this.state.events]
+    //   const pos = newState.findIndex((event, i) => {
+    //     return event.id === this.state.currentEvent.id
+    //   })
+    //   newState[pos] = newEvent
+    //   newState[pos].id = this.state.currentEvent.id
+    //   axios
+    //     .post('http://localhost:8080/updateEvent', newState[pos])
+    //     .then(response => {
+    //       console.log(response)
+    //       this.setState({
+    //         events: newState
+    //       }, () => this.props.history.push(this.props.match.url))
+    //     })
+    // }
   }
 
   deleteEvent = () => {
@@ -286,10 +268,9 @@ class Profile extends Component {
                   currentUser={this.props.currentUser}
                   {...routeProps}
                   selectedDate={this.selectedDate}
-                  usersChange={this.usersChange}
+                  selectedUsers={this.selectedUsers}
                   timeChange={this.timeChange}
                   dateChange={this.dateChange}
-                  currentEventUsers={this.state.currentEventUsers}
                   
                 />}
               />

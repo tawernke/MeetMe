@@ -38,6 +38,12 @@ router.get('/calendar/:userId', (req, res) => {
     .then(events => res.json(events))
 })
 
+router.get('/event/:eventId', (req, res) => {
+  MeetMeController
+    .getEvent(req.params)
+    .then(event => res.json(event))
+})
+
 router.post('/addEvent', (req, res) => {
   MeetMeController
     .postEvent(req.body)

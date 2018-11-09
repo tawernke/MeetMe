@@ -65,6 +65,16 @@ const MeetMeController = {
         })
     })
   },
+
+  getEvent: (event) => {
+    return new Promise((resolve, reject) => {
+      Event
+        .forge({id: event.eventId})
+        .fetch({withRelated: ['users']})
+        .then(event => resolve(event))
+    })
+  },
+
   postEvent: (newEvent) => {
     return new Promise((resolve, reject) => {
       const user_ids = newEvent.users

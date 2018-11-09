@@ -4,19 +4,37 @@ import MultiSelect from './MultiSelect'
 import { DatePicker } from 'antd'
 import { TimePicker } from 'antd'
 import 'antd/dist/antd.css'
+import axios from 'axios'
 
 class EventDetails extends Component {
 
+  state = {
+    eventDetails: {}
+  }
+
   componentDidMount() {
-    let startDate = this.props.state.currentEvent.start
-    if (!startDate) {
-      startDate = moment(this.props.state.selectedDate).format()
-      console.log(moment(startDate).format('YYYY-MM-DD'))
-    }
+    // let startDate = this.props.state.currentEvent.start
+    // if (!startDate) {
+    //   startDate = moment(this.props.state.selectedDate).format()
+      
+    // }
+    axios
+      .get(`http://localhost:8080/event/${Number(this.props.match.params.eventId)}`)
+      .then(results => {
+        const defaultUserNames = results.data.users.map(user => {
+          return user.name
+        })
+        console.log(results.data)
+        this.setState({
+          eventDetails: results.data,
+          userNames: defaultUserNames,
+        })
+      })
   }
   
   render() {
-    let {title, location, description} = this.props.state.currentEvent
+    const {location, start, end, title, description} = this.state.eventDetails
+    const {deleteEvent, cancelEventUpdate} = this.props
     return (
       <div className="eventDetails">
         {
@@ -47,26 +65,26 @@ class EventDetails extends Component {
               <p>From:</p>
               <DatePicker 
                 onChange={this.props.dateChange}
-                defaultValue={moment(this.props.state.selectedDate, 'YYYY-MM-DD')}
+                defaultValue={moment(start, 'YYYY-MM-DD')}
                 />
               <TimePicker 
                 use12Hours format="h:mm a" 
                 onChange={this.props.timeChange}
                 minuteStep={30}
-                defaultValue={moment(this.props.state.selectedDate, 'HH:mm')}
+                defaultValue={moment(start, 'HH:mm')}
                 />
             </div>
             <div className="col">
               <p>To:</p>
               <DatePicker 
                 onChange={this.props.dateChange}
-                defaultValue={moment(this.props.state.selectedDateEnd, 'YYYY-MM-DD')}
+                defaultValue={moment(end, 'YYYY-MM-DD')}
               />
               <TimePicker 
                 use12Hours format="h:mm a" 
                 onChange={this.props.timeChange}
                 minuteStep={30}
-                defaultValue={moment(this.props.state.selectedDateEnd, 'HH:mm')}
+                defaultValue={moment(end, 'HH:mm')}
               />
             </div>
           </div>
@@ -75,8 +93,9 @@ class EventDetails extends Component {
               <p>Select Users:</p>
               <MultiSelect 
                 users={this.props.users}
-                currentUser={this.props.state.currentUser}
-                usersChange={this.props.usersChange}
+                currentEventUserNames={this.state.userNames}
+                selectedUsers={this.props.selectedUsers}
+                eventUsers={this.state.eventDetails.users}
                 />
             </div>
             <div className="col">
@@ -84,13 +103,13 @@ class EventDetails extends Component {
           </div>
           <div className="row">
             <div className="col">
-              <button className="btn btn-danger" onClick={this.props.deleteEvent}>Delete</button>
+              <button className="btn btn-danger" onClick={deleteEvent}>Delete</button>
             </div>
             <div className="col">
               <button className="btn btn-primary">Save</button>
             </div>
             <div className="col">
-              <button className="btn btn-secondary" onClick={this.props.cancelEventUpdate}>Cancel</button>
+              <button className="btn btn-secondary" onClick={cancelEventUpdate}>Cancel</button>
             </div>
           </div>
         </form>
