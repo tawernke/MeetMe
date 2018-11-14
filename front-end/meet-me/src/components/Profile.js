@@ -124,12 +124,13 @@ class Profile extends Component {
   }
 
   timeChange = (time, boundary) => {
+    console.log(moment(time).format("HH"))
     this.setState({
-      [boundary]: moment(time).set({
-        HH: moment(time).format("HH"), 
-        m: moment(time).format("mm")
+      [boundary]: moment(this.state[boundary]).set({
+        'hour': moment(time).format("HH"),
+        'minute': moment(time).format("mm")
       })
-    })
+    }, () => console.log(boundary, this.state[boundary]))
   }
 
   dateChange = (date, boundary) => {
@@ -155,33 +156,38 @@ class Profile extends Component {
       allDay: false
     }
     console.log(newEvent)
-    // if(!this.state.currentEvent.id) {
-    //   axios
-    //     .post('http://localhost:8080/addEvent', newEvent)
-    //     .then(response => {
-    //       let newEvents = [...this.state.events]
-    //       newEvents.push(response.data)
-    //       this.setState({
-    //         events: newEvents,
-    //         isLoading: false
-    //       }, () => this.props.history.push(this.props.match.url))
-    //     })
-    // } else {
-    //   const newState = [...this.state.events]
-    //   const pos = newState.findIndex((event, i) => {
-    //     return event.id === this.state.currentEvent.id
-    //   })
-    //   newState[pos] = newEvent
-    //   newState[pos].id = this.state.currentEvent.id
-    //   axios
-    //     .post('http://localhost:8080/updateEvent', newState[pos])
-    //     .then(response => {
-    //       console.log(response)
-    //       this.setState({
-    //         events: newState
-    //       }, () => this.props.history.push(this.props.match.url))
-    //     })
-    // }
+    if (isNaN(this.props.match.params.eventId)) {
+      axios
+        .post('http://localhost:8080/addEvent', newEvent)
+        .then(response => {
+          console.log(response.data)
+          // const newEvents = this.state.events.concat(newEvent)
+          // this.setState({
+
+          // })
+          // let newEvents = [...this.state.events]
+          // newEvents.push(response.data)
+          this.setState({
+            events: this.state.events.concat(response.data),
+            isLoading: false
+          }, () => this.props.history.push(this.props.match.url))
+        })
+    } else {
+      const newState = [...this.state.events]
+      const pos = newState.findIndex((event, i) => {
+        return event.id === this.state.currentEvent.id
+      })
+      newState[pos] = newEvent
+      newState[pos].id = this.state.currentEvent.id
+      axios
+        .post('http://localhost:8080/updateEvent', newState[pos])
+        .then(response => {
+          console.log(response)
+          this.setState({
+            events: newState
+          }, () => this.props.history.push(this.props.match.url))
+        })
+    }
   }
 
   deleteEvent = () => {
