@@ -123,18 +123,18 @@ class Profile extends Component {
     })
   }
 
-  timeChange = (time) => {
+  timeChange = (time, boundary) => {
     this.setState({
-      selectedDate: moment(time).set({
+      [boundary]: moment(time).set({
         HH: moment(time).format("HH"), 
         m: moment(time).format("mm")
       })
     })
   }
 
-  dateChange = (date) => {
+  dateChange = (date, boundary) => {
     this.setState({
-      eventDate: moment(date).set({
+      [boundary]: moment(date).set({
         year: moment(date).format("YYYY"),
         month: moment(date).format("MM"),
         date: moment(date).format("DD")

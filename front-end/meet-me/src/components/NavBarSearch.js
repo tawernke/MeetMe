@@ -8,14 +8,12 @@ const Option = Select.Option
 class NavBarSearch extends Component {
 
   state = {
-    // fireRedirect: false,
     redirect: false,
     redirectUrl: '',
     fireRedirect: false
   }
   
-  onSelect = (value, anything) => {
-    console.log(value, anything.key)
+  onSelect = (value) => {
     const redirectUrl = `/${value}`
     this.props.history.push(redirectUrl)
     window.location.reload()

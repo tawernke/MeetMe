@@ -13,6 +13,7 @@ class EventDetails extends Component {
   }
 
   componentDidMount() {
+    if (!isNaN(this.props.match.params.eventId)) {
     axios
       .get(`http://localhost:8080/event/${Number(this.props.match.params.eventId)}`)
       .then(results => {
@@ -25,6 +26,27 @@ class EventDetails extends Component {
           isLoading: false
         })
       })
+    } else {
+      this.setState({
+        isLoading: false
+      })
+    }
+  }
+
+  startDateChange = (moment) => {
+    this.props.dateChange(moment, 'selectedDate')
+  }
+
+  endDateChange = (moment) => {
+    this.props.dateChange(moment, 'selectedDateEnd')
+  }
+
+  startTimeChange = (moment) => {
+    this.props.timeChange(moment, 'selectedDate')
+  }
+
+  endTimeChange = (moment) => {
+    this.props.timeChange(moment, 'selectedDateEnd')
   }
   
   render() {
@@ -59,27 +81,27 @@ class EventDetails extends Component {
             <div className="col">
               <p>From:</p>
               <DatePicker 
-                onChange={this.props.dateChange}
-                defaultValue={moment(start, 'YYYY-MM-DD')}
+                onChange={this.startDateChange}
+                defaultValue={start ? moment(start, 'YYYY-MM-DD') : null}
                 />
               <TimePicker 
                 use12Hours format="h:mm a" 
-                onChange={this.props.timeChange}
+                onChange={this.startTimeChange}
                 minuteStep={30}
-                defaultValue={moment(start, 'HH:mm')}
+                defaultValue={start ? moment(start, 'HH:mm') : null}
                 />
             </div>
             <div className="col">
               <p>To:</p>
               <DatePicker 
-                onChange={this.props.dateChange}
-                defaultValue={moment(end, 'YYYY-MM-DD')}
+                onChange={this.endDateChange}
+                defaultValue={end ? moment(end, 'YYYY-MM-DD'): null}
               />
               <TimePicker 
                 use12Hours format="h:mm a" 
-                onChange={this.props.timeChange}
+                onChange={this.endTimeChange}
                 minuteStep={30}
-                defaultValue={moment(end, 'HH:mm')}
+                defaultValue={end ? moment(end, 'HH:mm') : null}
               />
             </div>
           </div>

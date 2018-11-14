@@ -12,7 +12,7 @@ class Navbar extends Component {
 
   componentDidMount() {
     if (localStorage.getItem('USERNAME') !== null) {
-      let url = '/' + JSON.parse(localStorage.getItem(usernameStorageKey)).username
+      let url = '/' + JSON.parse(localStorage.getItem(usernameStorageKey)).id
       this.setState({
           homeUrl: url
         })
@@ -37,7 +37,6 @@ class Navbar extends Component {
             <NavBarSearch 
               users={this.props.users}
               history={this.props.history}
-              // {...routerProps}
               />
           </ul>
           <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
