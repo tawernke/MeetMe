@@ -1,10 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const MeetMeController = require('../controller/meetMe')
-const cors = require('cors')
-const bodyParser = require('body-parser')
-const upload  = require('multer')({ dest: 'tmp/uploads/' })
-
 
 //Homepage Routes
 router.post('/addUser', (req, res) => {

@@ -1,33 +1,28 @@
 import React, {Component} from 'react'
 import moment from 'moment'
 import MultiSelect from './MultiSelect'
-import { DatePicker } from 'antd'
-import { TimePicker } from 'antd'
+import { DatePicker, TimePicker } from 'antd'
 import 'antd/dist/antd.css'
 import axios from 'axios'
 
 class EventDetails extends Component {
 
   state = {
-    eventDetails: {}
+    eventDetails: {},
+    isLoading: true
   }
 
   componentDidMount() {
-    // let startDate = this.props.state.currentEvent.start
-    // if (!startDate) {
-    //   startDate = moment(this.props.state.selectedDate).format()
-      
-    // }
     axios
       .get(`http://localhost:8080/event/${Number(this.props.match.params.eventId)}`)
       .then(results => {
         const defaultUserNames = results.data.users.map(user => {
           return user.name
         })
-        console.log(results.data)
         this.setState({
           eventDetails: results.data,
           userNames: defaultUserNames,
+          isLoading: false
         })
       })
   }
@@ -38,7 +33,7 @@ class EventDetails extends Component {
     return (
       <div className="eventDetails">
         {
-        this.props.state.isLoading ? <h1>Loading...</h1> :
+        this.state.isLoading ? <h1>Loading...</h1> :
         <div>
         <h1>Event Creation</h1>
         <form onSubmit = {(e) => {this.props.addEvent(e)}}>

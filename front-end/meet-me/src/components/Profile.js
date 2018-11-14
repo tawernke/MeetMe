@@ -98,7 +98,6 @@ class Profile extends Component {
   }
 
   eventClick = (calEvent) => {
-    console.log(calEvent)
     this.state.events.some(event => {
       if(event.id === calEvent.id) {
         const currentEventUsers = event.users.map(user => {
@@ -116,11 +115,9 @@ class Profile extends Component {
         }, () => this.props.history.push(`${this.props.match.url}/event/${calEvent.id}`))
       }
     })
-    // this.props.history.push(`${this.props.match.url}/event/${calEvent.id}`)
   }
 
   selectedUsers = (userIds) => {
-    console.log(userIds)
     this.setState({
       eventUserIds: userIds
     })
@@ -147,9 +144,6 @@ class Profile extends Component {
 
   addEvent = (e) => {
     e.preventDefault()
-    // let eventUserIds = this.state.eventUsers.map(userId => {
-    //   return parseInt(userId, 10)
-    // })
     const form = e.target
     const newEvent = {
       title: form.title.value,
@@ -285,7 +279,7 @@ class Profile extends Component {
                   }}
                   selectable= {true}
                   select={this.select}
-                  defaultDate={'2018-11-24'}
+                  defaultDate={'2018-09-24'}
                   navLinks= {true} // can click day/week names to navigate views
                   editable= {true}
                   eventDrop={this.eventDrop}
