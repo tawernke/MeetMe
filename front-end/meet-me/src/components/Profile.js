@@ -124,13 +124,12 @@ class Profile extends Component {
   }
 
   timeChange = (time, boundary) => {
-    console.log(moment(time).format("HH"))
     this.setState({
       [boundary]: moment(this.state[boundary]).set({
         'hour': moment(time).format("HH"),
         'minute': moment(time).format("mm")
       })
-    }, () => console.log(boundary, this.state[boundary]))
+    })
   }
 
   dateChange = (date, boundary) => {
@@ -155,18 +154,10 @@ class Profile extends Component {
       users: this.state.eventUserIds !== 0 ? this.state.eventUserIds : this.state.currentEventUserIds,
       allDay: false
     }
-    console.log(newEvent)
-    if (isNaN(this.props.match.params.eventId)) {
+    if (this.props.location.pathname.includes('newEvent')) {
       axios
         .post('http://localhost:8080/addEvent', newEvent)
         .then(response => {
-          console.log(response.data)
-          // const newEvents = this.state.events.concat(newEvent)
-          // this.setState({
-
-          // })
-          // let newEvents = [...this.state.events]
-          // newEvents.push(response.data)
           this.setState({
             events: this.state.events.concat(response.data),
             isLoading: false
@@ -182,7 +173,6 @@ class Profile extends Component {
       axios
         .post('http://localhost:8080/updateEvent', newState[pos])
         .then(response => {
-          console.log(response)
           this.setState({
             events: newState
           }, () => this.props.history.push(this.props.match.url))
@@ -210,12 +200,13 @@ class Profile extends Component {
       })
   }
 
-  eventDrop = (event, delta, revertFunc) => {
+  eventDrop = (event) => {
     event.start = event.start
     const shiftedEvent = {
       id: event.id,
       start: event.start.format(),
       end: event.end.format(),
+      users: event.users.map(user => user.id)
     }
     axios
       .post('http://localhost:8080/updateEvent', shiftedEvent)
@@ -225,12 +216,6 @@ class Profile extends Component {
     this.setState ({
       selectedDate: date
     }, () => this.props.history.push(this.props.match.url + '/event/newEvent'))
-  }
-
-  cancelEventUpdate = () => {
-    this.setState({
-      currentEvent: ""
-    }, () => this.props.history.push(this.props.match.url))
   }
 
   select = (start, end) => {
@@ -285,12 +270,12 @@ class Profile extends Component {
                   }}
                   selectable= {true}
                   select={this.select}
-                  defaultDate={'2018-09-24'}
-                  navLinks= {true} // can click day/week names to navigate views
+                  defaultDate={moment()}
+                  navLinks= {true}
                   editable= {true}
                   eventDrop={this.eventDrop}
-                  eventLimit= {true} // allow "more" link when too many events
-                  events = {this.state.events}// events filtered by the current logged on user go here!!!!!!!
+                  eventLimit= {true}
+                  events = {this.state.events}
                   eventClick = {this.eventClick}
                   dayClick={this.dayClick}
                   se

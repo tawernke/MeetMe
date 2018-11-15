@@ -12,7 +12,7 @@ class Homepage extends Component {
 
   componentDidMount() {
     if (localStorage.getItem('USERNAME') !== null) {
-      const loggedInUser = JSON.parse(localStorage.getItem(usernameStorageKey)).username
+      const loggedInUser = JSON.parse(localStorage.getItem(usernameStorageKey)).id
       this.setState({
         redirect: true,
         redirectUrl: `/${loggedInUser}`

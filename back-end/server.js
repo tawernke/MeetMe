@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const bodyParser = require('body-parser')
-const port = process.argv[2] || 8080
+const port = process.env.PORT || process.argv[2] || 8080
 
 app.use(cors())
 app.use(express.static('public'))

@@ -97,8 +97,10 @@ const MeetMeController = {
       delete updatedEvent.users
       Event
         .forge({id: updatedEvent.id})
-        .save(updatedEvent)
+        .fetch({withRelated: ['users']})
         .then(event => {
+          event.users().detach()
+          event.save(updatedEvent)
           return event.users().attach(user_ids)
         })
         .then(()  => {

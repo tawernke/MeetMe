@@ -90,7 +90,7 @@ class App extends Component {
     })
     if(existingUser) {
       localStorage.setItem(usernameStorageKey, JSON.stringify(existingUser))
-      this.props.history.push(`/${existingUser.username}`)
+      this.props.history.push(`/${existingUser.id}`)
       this.setState({
         imageChange: true
       })
