@@ -106,6 +106,7 @@ class EventDetails extends Component {
               />
             </div>
           </div>
+          
           <div className="row user-select">
             <div className="col">
               <p>Select Users:</p>

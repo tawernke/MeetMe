@@ -59,7 +59,7 @@ router.delete('/deleteEvent', (req, res) => {
 })
 
 //Discover Routes
-router.get('/discover/:city/:street/:streetNumber', (req,res) => {
+router.get('/discover/:lat/:long', (req,res) => {
   MeetMeController
     .getSuggestedPlaces(req.params)
     .then(results => res.json(results.data))

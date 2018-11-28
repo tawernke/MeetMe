@@ -3,7 +3,6 @@ import axios from 'axios'
 import {Redirect} from 'react-router-dom'
 import Place from './Place'
 import {Spin} from 'antd'
-import {googleMapsApiKey} from '../ApiKey'
 
 const usernameStorageKey = 'USERNAME'
 
@@ -13,9 +12,6 @@ class Discover extends Component {
     placeSuggestions: [],
     savedPlaces: [],
     redirect: false,
-    city: '',
-    street: '',
-    streetNumber: '',
     isLoading: true,
     showingSearchResults: false
   }
@@ -26,30 +22,26 @@ class Discover extends Component {
         redirect: true,
       })
     } else {
-      let city = ''
-      let street = ''
-      let streetNumber = ''
-      navigator.geolocation.getCurrentPosition((pos) => {
-        let latlng = pos.coords.latitude + "," + pos.coords.longitude
-        axios
-          .get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=${googleMapsApiKey}`)
-          .then((res) => {
-            city = res.data.results[0].address_components[3].long_name
-            street = res.data.results[0].address_components[1].short_name
-            streetNumber = res.data.results[0].address_components[0].short_name
-            axios
-              .get(`http://localhost:8080/discover/${city}/${street}/${streetNumber}`)
-              .then(response => {
-                this.setState({
-                  placeSuggestions: response.data.businesses,
-                  streetNumber,
-                  street,
-                  city,
-                  isLoading: false,
-                })
-              })
-          })
+      var location = new Promise(function(resolve, reject) {
+        navigator.geolocation.getCurrentPosition(pos => {
+          const coord ={
+            lat:pos.coords.latitude,
+            long:pos.coords.longitude
+          }
+          resolve(coord)
+        })
       })
+      location
+        .then(res => {
+          axios
+          .get(`http://localhost:8080/discover/${res.lat}/${res.long}/`)
+          .then(response => {
+            this.setState({
+              placeSuggestions: response.data.businesses,
+              isLoading: false,
+            })
+          })
+        })
     }
   }
 

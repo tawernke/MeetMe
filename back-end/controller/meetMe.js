@@ -3,7 +3,6 @@ const User = require('../model/users')
 const Place = require ('../model/places')
 const Preference = require ('../model/preferences')
 const axios = require('axios')
-const {yelpApiKey} = require ('./ApiKey')
 
 const MeetMeController = {
   //Homepage controllers
@@ -129,10 +128,10 @@ const MeetMeController = {
   getSuggestedPlaces: (currentLocation) => {
     return new Promise((resolve, reject) => {
     const config = {
-      headers: {'Authorization': 'Bearer ' + yelpApiKey}
+      headers: {'Authorization': 'Bearer ' + process.env.YELP_API_KEY}
     }
     axios
-      .get(`http://api.yelp.com/v3/businesses/search?location=${currentLocation.streetNumber},${currentLocation.street},${currentLocation.city}`, config)
+      .get(`http://api.yelp.com/v3/businesses/search?latitude=${currentLocation.lat}&longitude=${currentLocation.long}`, config)
       .then(results => resolve(results))
     })
   },
@@ -140,7 +139,7 @@ const MeetMeController = {
     return new Promise((resolve, reject) => {
       const config = {
         headers: {
-          'Authorization': 'Bearer ' + yelpApiKey
+          'Authorization': 'Bearer ' + process.env.YELP_API_KEY
         }
       }
       axios

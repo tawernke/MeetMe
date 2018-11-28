@@ -8,3 +8,5 @@
 /front-end/meet-me/src/ApiKey.js
 
 .DS_Store
+
+.env
