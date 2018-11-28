@@ -1,11 +1,7 @@
-# dependencies
 /back-end/node_modules
 /front-end/node_modules
 
-#Secrets
-/back-end/knexfile.js
-/back-end/controller/ApiKey.js
-/front-end/meet-me/src/ApiKey.js
+/back-end/.env
 
 .DS_Store
 

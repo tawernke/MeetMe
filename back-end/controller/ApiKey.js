@@ -1,0 +1,3 @@
+const yelpApiKey = 'yXSglxQigTwkBK8bZZPNjkVbJ2SSZnIj4HCLphQS5UUVQ9MCcdDBY8ufvTslgERFJAdj-m8VuBsLXAxbdmMg3Z0kCVowa-nc5BawYsNQcEr7NjZDpJgRhRMispZxW3Yx'
+
+module.exports = {yelpApiKey}

@@ -22,7 +22,7 @@ class Discover extends Component {
         redirect: true,
       })
     } else {
-      var location = new Promise(function(resolve, reject) {
+      var location = new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(pos => {
           const coord ={
             lat:pos.coords.latitude,
