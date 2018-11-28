@@ -10,10 +10,12 @@ These instructions will get you a copy of the project up and running on your loc
 
 The dependencies for both the front-end and back-end will need to be installed by navigating to the directory and using npm or yarn
 
-Eg.
+### Creating the database
+
+A database will need to be created locally, then a migraion run to create the tables. Once a database has been created, navigate to the back-end directory and run the below command.
 
 ```
-npm i
+knex migrate:latest
 ```
 
 ### Environment variables
