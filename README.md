@@ -32,4 +32,4 @@ Technologies used:
 * Express
 * PostgreSQL
 * [FullCallendar](https://fullcalendar.io/) - A javascript callendar
-* [Ant Design](hhttps://ant.design/) - React UI component library
+* [Ant Design](https://ant.design/) - React UI component library
