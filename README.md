@@ -26,6 +26,10 @@ The database variables are used to populate the knex.js file.
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+Technologies used:
+* React
+* Node
+* Express
+* PostgreSQL
+* [FullCallendar](https://fullcalendar.io/) - A javascript callendar
+* [Ant Design](hhttps://ant.design/) - React UI component library
