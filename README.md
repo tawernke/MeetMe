@@ -12,26 +12,32 @@ The dependencies for both the front-end and back-end will need to be installed b
 
 ### Creating the database
 
-A database will need to be created locally, then a migraion run to create the tables. Once a database has been created, navigate to the back-end directory and run the below command.
+A SQL database will need to be created locally, then a migraion run to create the tables. Once a database has been created, open the knexfile.js file and add the configuration settings of the database created.
+
+After enetering the config settings, navigate to the back-end directory and run the below command to run the database migration
 
 ```
-knex migrate:latest
+npm run migrate
 ```
 
 ### Environment variables
 
-In the root of the back-end directory is a template .env file that will need to be filled in with a Yelp API key and some database settings. 
+In the root of the back-end directory is a template .env file that will need to be filled in with a Yelp API key. A Yelp API key can be obatined using the instruction [here](https://www.yelp.ca/developers/documentation/v3/authentication)
 
-A Yelp API key can be obatined using the instruction [here](https://www.yelp.ca/developers/documentation/v3/authentication)
+## Running the app
 
-The database variables are used to populate the knex.js file.
+Once the database is all setup and the environment variables set, the app can be started by navigating to the back-end directory then running the following command, then navigating to the front-end directory and runnig the same command.
+
+```
+npm start
+```
 
 ## Built With
 
-Technologies used:
 * React
 * Node
 * Express
 * PostgreSQL
+* [Yelp Fusion API](https://www.yelp.com/fusion)
 * [FullCallendar](https://fullcalendar.io/) - A javascript callendar
 * [Ant Design](https://ant.design/) - React UI component library

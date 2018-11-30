@@ -59,7 +59,9 @@ const MeetMeController = {
         })
         .where('events_users.user_id', '=', user.userId)
         .fetchAll({withRelated: ['users']})
-        .then(events => resolve(events))
+        .then(events => {
+          resolve(events)
+        })
     })
   },
 

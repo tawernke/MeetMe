@@ -34,10 +34,6 @@ class YourPlaces extends Component {
     })
   }
 
-  callback = (key) => {
-    console.log(key)
-  }
-
   handleOk = (e) => {
     this.setState({
       visible: false,

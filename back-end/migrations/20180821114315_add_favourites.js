@@ -47,6 +47,7 @@ exports.down = function (knex, Promise) {
     .dropTable('places_users')
     .dropTable('preferences_users')
     .dropTable('places')
+    .dropTable('preferences')
     .dropTable('users')
     .dropTable('events')
 }

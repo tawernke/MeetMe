@@ -55,7 +55,6 @@ class Profile extends Component {
   }
 
   addUsersCallendar = (value, fullOption) => {
-    console.log(value, fullOption)
     const selectedUserEvents = this.state.events.filter(event => {
       let foundUser = event.users.filter(user => {
         return user.name === fullOption[0].props.children
@@ -114,6 +113,7 @@ class Profile extends Component {
           selectedDateEnd: calEvent.end,
         }, () => this.props.history.push(`${this.props.match.url}/event/${calEvent.id}`))
       }
+      return null
     })
   }
 
@@ -196,12 +196,12 @@ class Profile extends Component {
     }, () => this.props.history.push(this.props.match.url))
     axios.delete('http://localhost:8080/deleteEvent', {data: deleteObj})
       .then(response => {
-        console.log(response)
+        console.log("response")
       })
   }
 
   eventDrop = (event) => {
-    event.start = event.start
+    // event.start = event.start
     const shiftedEvent = {
       id: event.id,
       start: event.start.format(),

@@ -7,7 +7,6 @@ class Favourites extends Component {
     e.preventDefault()
     const form = e.target
     const {favouriteText} = form
-    console.log(favouriteText.value)
     if (favouriteText.value !== '') {
       this.props.addPlace(favouriteText.value, false)
     }

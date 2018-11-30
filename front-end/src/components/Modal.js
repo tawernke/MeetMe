@@ -8,7 +8,6 @@ const hide = {
 };
 
 class TaskView extends Component {
-    //Responsible for rendering contents of the modal window
     render(){
         return(
             !this.props.taskDetail[0] ? false : (
