@@ -8,13 +8,17 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installing
 
-The dependencies for both the front-end and back-end will need to be installed by navigating to the directory and using npm or yarn
+The dependencies for both the front-end and back-end will need to be installed by navigating to the relevant directory and using one of the following commands.
+
+```
+npm install or yarn add
+```
 
 ### Creating the database
 
 A SQL database will need to be created locally, then a migraion run to create the tables. Once a database has been created, open the knexfile.js file and add the configuration settings of the database created.
 
-After enetering the config settings, navigate to the back-end directory and run the below command to run the database migration
+After entering the config settings, navigate to the back-end directory and run the below command to run the database migration
 
 ```
 npm run migrate
