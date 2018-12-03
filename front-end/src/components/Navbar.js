@@ -44,11 +44,11 @@ class Navbar extends Component {
               <a className="nav-link" onClick={this.homepage} href="/">Home <span className="sr-only">(current)</span></a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" onClick={this.discover} >Discover</a>
+              <p className="nav-link" onClick={this.discover} >Discover</p>
             </li>
             
             <li className="nav-item">
-              <a className="nav-link" onClick={this.props.logOut} href="">Logout</a>
+              <p className="nav-link" onClick={this.props.logOut} href="">Logout</p>
             </li>
           </ul>
         </div>

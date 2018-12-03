@@ -26,11 +26,6 @@ html, #root{
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 .app {
   padding-top: 55px;
   height: 100%
@@ -75,6 +70,10 @@ body {
 
 .navbar-logo {
   height: 100%;
+}
+
+.nav-link {
+  cursor: pointer;
 }
 
 /* Profile page */

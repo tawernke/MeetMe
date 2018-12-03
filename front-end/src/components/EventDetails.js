@@ -83,26 +83,26 @@ class EventDetails extends Component {
               <p>From:</p>
               <DatePicker 
                 onChange={this.startDateChange}
-                defaultValue={start ? moment(start) : this.props.state.selectedDate}
+                defaultValue={start ? moment(start, 'YYYY-MM-DD HH:mm') : this.props.state.selectedDate}
                 />
               <TimePicker 
                 use12Hours format="h:mm a" 
                 onChange={this.startTimeChange}
                 minuteStep={30}
-                defaultValue={start ? moment(start, 'HH:mm Z') : this.props.state.selectedDate}
+                defaultValue={start ? moment(start, 'HH:mm') : this.props.state.selectedDate}
                 />
             </div>
             <div className="col">
               <p>To:</p>
               <DatePicker 
                 onChange={this.endDateChange}
-                defaultValue={end ? moment(end) : this.props.state.selectedDateEnd}
+                defaultValue={end ? moment(end, 'YYYY-MM-DD HH:mm') : this.props.state.selectedDateEnd}
               />
               <TimePicker 
                 use12Hours format="h:mm a" 
                 onChange={this.endTimeChange}
                 minuteStep={30}
-                defaultValue={end ? moment(end, 'HH:mm Z') : this.props.state.selectedDateEnd}
+                defaultValue={end ? moment(end, 'HH:mm') : this.props.state.selectedDateEnd}
               />
             </div>
           </div>
@@ -127,9 +127,6 @@ class EventDetails extends Component {
             <div className="col">
               <button type="submit" className="btn btn-primary">Save</button>
             </div>
-            {/* <div className="col">
-              <button className="btn btn-secondary" onClick={cancelEventUpdate}>Cancel</button>
-            </div> */}
           </div>
         </form>
         </div>

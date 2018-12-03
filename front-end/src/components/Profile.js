@@ -43,7 +43,7 @@ class Profile extends Component {
       axios.get(`http://localhost:8080/calendar/${this.props.match.params.username}`)
         .then(response => {
           const coloredEvents = response.data.map(event => {
-            event.color = 'blue'
+            event.color = "#3A87AD";
             return event
           })
           this.setState({
@@ -88,7 +88,7 @@ class Profile extends Component {
       })
     } else {
       const removeUserEvents = this.state.events.filter(event => {
-        return event.color === 'blue'
+        return event.color === "#3A87AD";
       })
       this.setState({
         events: removeUserEvents
@@ -133,6 +133,7 @@ class Profile extends Component {
   }
 
   dateChange = (date, boundary) => {
+    console.log(date)
     this.setState({
       [boundary]: moment(date).set({
         year: moment(date).format("YYYY"),
@@ -147,13 +148,14 @@ class Profile extends Component {
     const form = e.target
     const newEvent = {
       title: form.title.value,
-      start: moment(this.state.selectedDate).format(),
-      end: moment(this.state.selectedDateEnd).format(),
+      start: moment(this.state.selectedDate),
+      end: moment(this.state.selectedDateEnd),
       location: form.location.value,
       description: form.description.value,
       users: this.state.eventUserIds !== 0 ? this.state.eventUserIds : this.state.currentEventUserIds,
       allDay: false
     }
+    console.log(newEvent)
     if (this.props.location.pathname.includes('newEvent')) {
       axios
         .post('http://localhost:8080/addEvent', newEvent)
@@ -195,9 +197,6 @@ class Profile extends Component {
       currentEvent: {}
     }, () => this.props.history.push(this.props.match.url))
     axios.delete('http://localhost:8080/deleteEvent', {data: deleteObj})
-      .then(response => {
-        console.log("response")
-      })
   }
 
   eventDrop = (event) => {
@@ -220,8 +219,8 @@ class Profile extends Component {
 
   select = (start, end) => {
     this.setState ({
-      selectedDate: moment(start).set('hour', moment().get('hour')),
-      selectedDateEnd: moment(end).subtract(60, 'minute').set('hour', moment().get('hour'))
+      selectedDate: moment(start, 'YYYY-MM-DD HH:mm Z').set('hour', moment().get('hour')),
+      selectedDateEnd: moment(end, 'YYYY-MM-DD HH:mm Z').subtract(60, 'minute').set('hour', moment().get('hour'))
     }, () => this.props.history.push(this.props.match.url + '/event/newEvent'))
   }
   
