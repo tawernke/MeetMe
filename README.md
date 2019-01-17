@@ -26,11 +26,11 @@ npm run migrate
 
 ### Environment variables
 
-In the root of the back-end directory is a template .env file that will need to be filled in with a Yelp API key. A Yelp API key can be obatined using the instruction [here](https://www.yelp.ca/developers/documentation/v3/authentication)
+In the root of the back-end directory is a template .env file that will need to be filled in with a Yelp API key. A Yelp API key can be obatined using the instructions [here](https://www.yelp.ca/developers/documentation/v3/authentication)
 
 ## Running the app
 
-Once the database is all setup and the environment variables set, the app can be started by navigating to the back-end directory then running the following command, then navigating to the front-end directory and runnig the same command.
+Once the database is all setup and the environment variables set, the app can be started by navigating to the back-end directory then running the following command, then navigating to the front-end directory and running the same command.
 
 ```
 npm start
